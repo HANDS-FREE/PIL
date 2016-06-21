@@ -124,4 +124,5 @@ SOURCES += \
     src/gui/gl/PosedObject.cpp \
     src/gui/gl/SignalHandle.cpp \
     src/gui/gl/Win3D.cpp \
-    apps/ClassLoaderTest/GUITest.cpp
+    apps/ClassLoaderTest/GUITest.cpp \
+    apps/GUI_Test/GUITest.cpp

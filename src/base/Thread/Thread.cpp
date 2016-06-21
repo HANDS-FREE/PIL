@@ -76,7 +76,8 @@ private:
 
 Thread::Thread():
     _id(uniqueId()),
-    _name(makeName())
+    _name(makeName()),
+    _needStop(false)
 {
 }
 

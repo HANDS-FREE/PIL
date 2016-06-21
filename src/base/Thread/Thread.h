@@ -178,6 +178,9 @@ public:
         /// sleep. For threads that are not suspended, calling this
         /// function has the effect of preventing the subsequent
         /// trySleep() call to put thread in a suspended state.
+    void stop(){_needStop=true;}
+
+    bool shouldStop(){return _needStop;}
 
     static void sleep(long milliseconds);
         /// Suspends the current thread for the specified
@@ -228,6 +231,7 @@ private:
 
     int                 _id;
     std::string         _name;
+    bool                _needStop;
     mutable FastMutex   _mutex;
 
     friend class ThreadLocalStorage;

@@ -1,0 +1,24 @@
+get_filename_component(TARGET_NAME ${CMAKE_CURRENT_LIST_DIR} NAME)
+string(REPLACE " " "_" TARGET_NAME ${TARGET_NAME})
+
+if(CMAKE_SOURCE_DIR STREQUAL CMAKE_CURRENT_LIST_DIR)
+	cmake_minimum_required(VERSION 2.8.6)
+	project(${TARGET_NAME})
+endif()
+
+# Collect all source files
+file(GLOB_RECURSE SOURCE_FILES_ALL RELATIVE ${CMAKE_CURRENT_LIST_DIR} *.cpp *.c *.cc)
+
+if(SOURCE_FILES_ALL)
+
+	set(LIBRARY_MODULES QT QGLVIEWER PI_BASE PI_GUI)
+	foreach(MODULE_NAME ${LIBRARY_MODULES})
+	list(APPEND COMPILEFLAGS ${${MODULE_NAME}_INCLUDES})
+	list(APPEND LINKFLAGS    ${${MODULE_NAME}_LIBRARIES})
+	endforeach()
+
+	include_directories(${COMPILEFLAGS})
+
+	add_executable(${TARGET_NAME} ${CMAKE_CURRENT_LIST_DIR} ${SOURCE_FILES_ALL})
+	target_link_libraries(${TARGET_NAME} ${LINKFLAGS})
+endif()

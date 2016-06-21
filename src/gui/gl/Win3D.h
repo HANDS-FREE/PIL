@@ -18,7 +18,7 @@
 #include <base/Types/Point.h>
 #include <base/Types/SE3.h>
 #include <base/Thread/Thread.h>
-#include <base/types/SPtr.h>
+#include <base/Types/SPtr.h>
 
 
 namespace pi {
