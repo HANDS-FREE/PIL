@@ -4,8 +4,15 @@
 
 #ifdef PIL_OS_FAMILY_UNIX
 
-#include <iostream>
 #include <stdio.h>
+#include <string.h>
+
+#include <dirent.h>
+#include <sys/stat.h>
+
+#include <algorithm>
+
+#include <iostream>
 #include <vector>
 #include <string>
 #include <unistd.h>
@@ -13,9 +20,10 @@
 #include <sys/types.h>
 #include <pwd.h>
 #include <climits>
-#include <sys/stat.h>
-#include <base/Utils/Ascii.h>
 
+
+#include <base/Utils/Ascii.h>
+#include <base/Debug/Assert.h>
 
 #ifndef PATH_MAX
 #define PATH_MAX 1024 // fallback
@@ -23,8 +31,6 @@
 
 
 namespace pi {
-
-
 
 class PathImpl
 {
@@ -41,6 +47,10 @@ public:
     static bool pathExist(const std::string& path);
 
     static bool mkdir(const std::string& path);
+
+    static bool rm(const std::string& path);
+
+    static bool lsdir(const std::string& path,std::vector<std::string>& dl);
 
 };
 
@@ -61,14 +71,52 @@ bool PathImpl::pathExist(const std::string& path){
 bool PathImpl::mkdir(const std::string& path)
 {
     char            cmds[2048];
-    int             ret;
-
     sprintf(cmds, "mkdir -p '%s'", path.c_str());
 
-    ret = system(cmds);
-    if( ret != 0 ) ret = -1;
+    return system(cmds)==0;
+}
 
-    return ret;
+bool PathImpl::rm(const std::string& path)
+{
+    char            cmd[2048];
+
+    sprintf(cmd, "rm -rf '%s'", path.c_str());
+
+    return system(cmd)==0;
+}
+
+bool PathImpl::lsdir(const std::string& path,std::vector<std::string>& dl)
+{
+    DIR             *dir;
+    struct dirent   *dp;
+
+    // open directory
+    dir = opendir(path.c_str());
+    if( dir == NULL ) {
+        pi_dbg_error("Failed to open dir: %s\n", dir_name.c_str());
+        return false;
+    }
+
+    // get each items
+    dl.clear();
+    for(dp=readdir(dir); dp!=NULL; dp=readdir(dir)) {
+        // skip .
+        if( strlen(dp->d_name) == 1 && dp->d_name[0] == '.' )
+            continue;
+
+        // skip ..
+        if( strlen(dp->d_name) == 2 && dp->d_name[0] == '.' && dp->d_name[1] == '.' )
+            continue;
+
+        // add to list
+        dl.push_back(dp->d_name);
+    }
+
+    closedir(dir);
+
+    // sort all file name
+    std::sort(dl.begin(), dl.end());
+    return true;
 }
 
 std::string PathImpl::currentImpl()
@@ -178,5 +226,6 @@ void PathImpl::listRootsImpl(std::vector<std::string>& roots)
 
 
 } // namespace Poco
+
 #endif // PIL_OS_UNIX
 #endif // PATH_UNIX_H

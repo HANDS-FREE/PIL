@@ -78,7 +78,14 @@ HEADERS += src/base/base.h \
     src/gui/gl/PosedObject.h \
     src/gui/gl/SignalHandle.h \
     src/gui/gl/Win3D.h \
-    src/gui/gl/OpenGL.h
+    src/gui/gl/OpenGL.h \
+    src/gui/widgets/qcustomplot.h \
+    src/gui/widgets/qFlightInstruments.h \
+    src/gui/widgets/SvarTable.h \
+    src/hardwares/UART/UART.h \
+    src/base/Types/RingBuffer.h \
+    src/hardwares/Gps/GPS.h \
+    src/hardwares/Gps/PathTable.h
 
 SOURCES += \
     src/base/Thread/Thread_POSIX.cpp \
@@ -124,5 +131,9 @@ SOURCES += \
     src/gui/gl/PosedObject.cpp \
     src/gui/gl/SignalHandle.cpp \
     src/gui/gl/Win3D.cpp \
-    apps/ClassLoaderTest/GUITest.cpp \
-    apps/GUI_Test/GUITest.cpp
+    apps/GUI_Test/GUITest.cpp \
+    src/gui/widgets/qcustomplot.cpp \
+    src/gui/widgets/qFlightInstruments.cpp \
+    src/gui/widgets/SvarTable.cpp \
+    src/hardwares/UART/UART.cpp \
+    src/hardwares/Gps/GPS.cpp

@@ -103,6 +103,7 @@ private:
     struct ThreadData
     {
         ThreadData():
+            pRunnableTarget(nullptr),
             thread(0),
             prio(PRIO_NORMAL_IMPL),
             policy(SCHED_OTHER),

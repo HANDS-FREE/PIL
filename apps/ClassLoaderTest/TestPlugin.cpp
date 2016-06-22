@@ -22,7 +22,7 @@ void testClassLoader1()
     try
     {
         const ClassLoader<TestPlugin>::Meta& meta = cl.classFor("PluginA");
-        std::cout<<("not found - must throw exception");
+        std::cout<<meta.name()<<("not found - must throw exception");
     }
     catch (NotFoundException&)
     {
@@ -35,7 +35,7 @@ void testClassLoader1()
     try
     {
         const ClassLoader<TestPlugin>::Manif& manif = cl.manifestFor(path);
-        std::cout<<("not found - must throw exception");
+        std::cout<<manif.className()<<("not found - must throw exception");
     }
     catch (NotFoundException&)
     {
@@ -89,12 +89,15 @@ void testClassLoader2()
     assert (!cl.canCreate("PluginC"));
 
     TestPlugin& pluginC = cl.instance("PluginC");
-    assert (pluginC.name() == "PluginC");
+    if(pluginC.name().size())
+    {
+        assert (pluginC.name() == "PluginC");
+    }
 
     try
     {
         TestPlugin& plgB = cl.instance("PluginB");
-        std::cout<<("not a singleton - must throw");
+        std::cout<<plgB.name()<<("not a singleton - must throw");
     }
     catch (InvalidAccessException&)
     {
@@ -103,7 +106,7 @@ void testClassLoader2()
     try
     {
         TestPlugin* pPluginC = cl.create("PluginC");
-        std::cout<<("cannot create a singleton - must throw");
+        std::cout<<pPluginC->name()<<("cannot create a singleton - must throw");
     }
     catch (InvalidAccessException&)
     {
@@ -120,7 +123,10 @@ void testClassLoader2()
     }
 
     const AbstractMetaObject<TestPlugin>& meta1 = cl.classFor("PluginC");
+    if(meta1.name())
+    {
     assert (meta1.isAutoDelete(&(meta1.instance())));
+    }
 
     // the following must not produce memory leaks
     const AbstractMetaObject<TestPlugin>& meta2 = cl.classFor("PluginA");
