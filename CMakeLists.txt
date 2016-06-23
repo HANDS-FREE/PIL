@@ -45,6 +45,7 @@ set(QT_LIBRARIES QtGui QtCore QtXml GL GLU glut GLEW)
 set(PI_BASE_INCLUDES ${CMAKE_SOURCE_DIR}/src)
 set(PI_BASE_LIBRARIES pi_base)
 set(PI_GUI_LIBRARIES pi_gui)
+set(PI_CV_LIBRARIES pi_cv)
 #####################################################################
 # Results collection
 macro(PIL_CHECK_DEPENDENCY LIBNAME)
@@ -87,10 +88,17 @@ message("----------------------------------------------------------")
 # Now do build things
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/bin)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/libs)
-
 # Build libs
 add_subdirectory(src)
 
 # Build apps
 add_subdirectory(apps)
+
+get_property(LIBS2COMPILE GLOBAL PROPERTY LIBS2COMPILE)
+get_property(APPS2COMPILE GLOBAL PROPERTY APPS2COMPILE)
+ 
+message("The follow targets are going to be build:")
+message("LIBS(${CMAKE_LIBRARY_OUTPUT_DIRECTORY}): " ${LIBS2COMPILE})
+message("APPS(${CMAKE_RUNTIME_OUTPUT_DIRECTORY}): " ${APPS2COMPILE})
+
 

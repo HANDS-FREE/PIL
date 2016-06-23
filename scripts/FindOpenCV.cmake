@@ -51,6 +51,7 @@ IF(WIN32)
 	endif( OPENCV2_PATH )
 
 ELSE(WIN32) # Linux
+
 	FIND_PATH( OPENCV_INCLUDE_DIR opencv2/opencv.hpp
 	# installation selected by user
 	$ENV{OPENCV_HOME}/include
@@ -60,25 +61,37 @@ ELSE(WIN32) # Linux
 	/usr/include
 	/opt/opencv-2.4.9/include
 	)
-	
-FIND_LIBRARY(OPENCV_LIBRARIES NAMES opencv_core opencv_highgui opencv_imgproc opencv_calib3d opencv_features2d opencv_ocl opencv_gpu opencv_legacy opencv_superres opencv_videostab opencv_ml opencv_contrib bopencv_flann opencv_photo opencv_objdetect opencv_stitching
-  PATHS
-	/usr/lib/x86_64-linux-gnu
-  /usr/lib
-  /usr/local/lib
-  /opt/local/lib
-  /sw/lib
-	/opt/opencv-2.4.9/lib
-  )
 
-	if( OPENCV_INCLUDE_DIR AND PENCV_LIBRARIES)
+
+	set(OPENCV_MODULES2FIND opencv_core opencv_highgui opencv_imgproc opencv_calib3d opencv_features2d opencv_ocl opencv_gpu opencv_legacy opencv_superres opencv_videostab opencv_ml opencv_contrib bopencv_flann opencv_photo opencv_objdetect opencv_stitching)
+
+	foreach (OPENCV_MODULE_NAME ${OPENCV_MODULES2FIND})
+		FIND_LIBRARY(${OPENCV_MODULE_NAME}_LIBRARIES NAMES ${OPENCV_MODULE_NAME}
+			PATHS
+			/usr/lib/x86_64-linux-gnu
+			/usr/lib
+			/usr/local/lib
+			/opt/local/lib
+			/sw/lib
+			/opt/opencv-2.4.9/lib
+			)
+		if(${OPENCV_MODULE_NAME}_LIBRARIES)
+			set(${OPENCV_MODULE_NAME}_INCLUDES ${OPENCV_INCLUDES})
+			set(${OPENCV_MODULE_NAME}_FOUND 1)
+			list(APPEND OPENCV_LIBRARIES ${${OPENCV_MODULE_NAME}_LIBRARIES})
+		else(${OPENCV_MODULE_NAME}_LIBRARIES)
+			message("Can't found module "${OPENCV_MODULE_NAME})
+		endif(${OPENCV_MODULE_NAME}_LIBRARIES)
+	endforeach()
+
+	if( OPENCV_INCLUDE_DIR AND OPENCV_LIBRARIES)
 		MESSAGE( STATUS "Looking for OpenCV2.2 or greater - found")
 		MESSAGE( STATUS "OpenCV2.2 include path: ${OPENCV_INCLUDE_DIR}" )
 		SET ( OPENCV2_FOUND 1 )
-	else(  OPENCV_INCLUDE_DIR AND PENCV_LIBRARIES)
+	else(  OPENCV_INCLUDE_DIR AND OPENCV_LIBRARIES)
 		message( STATUS "Looking for OpenCV2.2 or greater  - not found" )
 		SET ( OPENCV2_FOUND 0 )
-	endif(  OPENCV_INCLUDE_DIR AND PENCV_LIBRARIES)
+	endif(  OPENCV_INCLUDE_DIR AND OPENCV_LIBRARIES)
 
 	
 ENDIF(WIN32)

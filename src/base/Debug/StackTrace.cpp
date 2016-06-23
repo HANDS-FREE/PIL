@@ -79,7 +79,7 @@ int get_exec_output(char *cmd, char *buf, int buf_len)
     int     stat_loc;
     int     infp, outfp;
     int     i, l;
-    ssize_t nread;
+//    ssize_t nread;
 
     // open pipe
     pid = popen2(cmd, &infp, &outfp);
@@ -89,7 +89,7 @@ int get_exec_output(char *cmd, char *buf, int buf_len)
     }
 
     // read output
-    nread = read(outfp, buf, buf_len);
+//    nread = read(outfp, buf, buf_len);
 
     // close pip file
     close(infp);
@@ -130,7 +130,7 @@ static inline void printStackTrace( FILE *out = stderr, unsigned int max_frames 
     char    s_cmd[1024];
     char    s_fileline[1024];
 
-    unsigned int    i, j;
+    unsigned int    i;//, j
 
     // retrieve current stack addresses
     unsigned int addrlen = backtrace( addrlist, sizeof( addrlist ) / sizeof( void* ));
@@ -208,9 +208,9 @@ static inline void printStackTrace( FILE *out = stderr, unsigned int max_frames 
                 if( *p == '[' )
                     continue;
                 else if( *p == ']' )
-                    s_addr[j] = '\0';
+                    s_addr[(int)j] = '\0';
                 else
-                    s_addr[j++] = *p;
+                    s_addr[(int)j++] = *p;
             }
             //fprintf(out, "addr: %s\n", s_addr);
         }
@@ -221,10 +221,10 @@ static inline void printStackTrace( FILE *out = stderr, unsigned int max_frames 
                 if( *p == '+' )
                     continue;
                 else if( *p == ')' ) {
-                    s_off[j] = '\0';
+                    s_off[(int)j] = '\0';
                     break;
                 } else
-                    s_off[j++] = *p;
+                    s_off[(int)j++] = *p;
             }
             //fprintf(out, "offset: %s\n", s_off);
         }

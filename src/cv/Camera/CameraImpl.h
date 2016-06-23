@@ -2,18 +2,19 @@
 #define CAMERAIMPL_H
 
 #include <iostream>
-#include <base/types/types.h>
+#include <base/Types/Point.h>
+
 #if 0//USE_SELF_DEFINED
+#define NO_OPENCV
 #else
 #include <opencv2/core/core.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
-
 #define HAS_OPENCV
+
 #endif
 
 namespace pi
 {
-namespace hardware {
 
 class CameraImpl//No camera
 {
@@ -25,7 +26,7 @@ public:
 
     virtual std::string info(){return "No camera established.\n";}
 
-    virtual int applyScale(double scale=0.5){}
+    virtual bool applyScale(double scale=0.5){return false;}
 
     virtual bool isValid(){return false;}
     virtual int refreshParaments(){return -1;}
@@ -47,7 +48,7 @@ public:
 
     virtual std::string info(){return "CameraType:Ideal\n";}
 
-    virtual int applyScale(double scale=0.5){return -1;}
+    virtual bool applyScale(double scale=0.5){return false;}
 
     virtual bool isValid(){return true;}
 
@@ -61,15 +62,15 @@ public:
 class CameraPinhole:public CameraImpl
 {
 public:
-    CameraPinhole():fx(0),fy(0),fx_inv(0),fy_inv(0),cx(0),cy(0){}
+    CameraPinhole():fx(0),fy(0),cx(0),cy(0),fx_inv(0),fy_inv(0){}
     CameraPinhole(int _w,int _h,double _fx,double _fy,double _cx,double _cy)
-        :CameraImpl(_w,_h),fx(_fx),fy(_fy),fx_inv(0),fy_inv(0),cx(_cx),cy(_cy)
+        :CameraImpl(_w,_h),fx(_fx),fy(_fy),cx(_cx),cy(_cy),fx_inv(0),fy_inv(0)
     {refreshParaments();}
     virtual std::string CameraType(){return "PinHole";}
 
     virtual std::string info();
 
-    virtual int applyScale(double scale=0.5);
+    virtual bool applyScale(double scale=0.5);
 
     virtual bool isValid();
 
@@ -110,7 +111,7 @@ public:
 
     virtual int refreshParaments();
 
-    virtual int applyScale(double scale=0.5);
+    virtual bool applyScale(double scale=0.5);
 
     virtual Point2d Project(const Point3d& p3d);
     virtual Point3d UnProject(const Point2d& p2d);
@@ -136,7 +137,7 @@ typedef CameraATAN CameraANTA;
 class CameraOpenCV:public CameraImpl
 {
 public:
-    CameraOpenCV():fx(0),fy(0),fx_inv(0),fy_inv(0),cx(0),cy(0){}
+    CameraOpenCV():fx(0),fy(0),cx(0),cy(0),fx_inv(0),fy_inv(0){}
     CameraOpenCV(int Width,int Height,
                  double Fx,double Fy,double Cx,double Cy,
                  double K1,double K2,double P1,double P2,double K3)
@@ -147,7 +148,7 @@ public:
 
     virtual std::string info();
 
-    virtual int applyScale(double scale=0.5);
+    virtual bool applyScale(double scale=0.5);
 
     virtual bool isValid(){return w>0&&h>0&&fx!=0&&fy!=0;}
 
@@ -173,7 +174,7 @@ public:
 
     virtual std::string info();
 
-    virtual int applyScale(double scale=0.5){return -1;}
+    virtual bool applyScale(double scale=0.5){return false;}
 
     virtual bool isValid(){return w>0&&h>0&&length_pol&&length_invpol;}
 
@@ -197,5 +198,5 @@ public:
     double e;          // affine parameter
 };
 
-}}
+}
 #endif // CAMERAIMPL_H

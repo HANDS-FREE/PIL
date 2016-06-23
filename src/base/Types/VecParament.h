@@ -52,14 +52,14 @@ public:
             iss>>x;
             push_back(x);
         }
-
+        return true;
     }
 
     std::string toString()
     {
         std::ostringstream ost;
         ost<<"[";
-        for(int i=0;i<size()-1;i++)
+        for(size_t i=0;i<size()-1;i++)
             ost<<at(i)<<" ";
         ost<<at(size()-1)<<"]";
         return ost.str();

@@ -1,4 +1,6 @@
-add_subdirectory(ClassLoaderTest)
+set(APPS2BUILD CameraTest ClassLoaderTest GUI_Test Svar_Test Timer_Test)
+#  SE3_Test
 
-add_subdirectory(GUI_Test)
-
+foreach(APPNAME ${APPS2BUILD})
+add_subdirectory(${APPNAME})
+endforeach()

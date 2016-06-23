@@ -1,445 +1,217 @@
 #include "Camera.h"
+#include "CameraImpl.h"
 
-#include <base/debug/debug_config.h>
+#include <base/Path/Path.h>
 #include <base/Svar/Svar.h>
-#include <base/Svar/VecParament.h>
-
-#include "CameraOCAM.h"
+#include <base/Types/VecParament.h>
 
 using namespace std;
 
-Camera::Camera():
-    fx(0),fy(0),cx(0),cy(0),fx_inv(0),fy_inv(0),height(0),width(0)
-{
+namespace pi {
 
-}
-
-Camera::Camera(std::string file_name)
+Camera::Camera(const std::string& name):impl(new CameraImpl())
 {
-    fromFile(file_name);
-}
-
-Camera::Camera(int Width,int Height,double Fx,double Fy,double Cx,double Cy)
-{
-    setCamera(Width,Height,Fx,Fy,Cx,Cy);
-}
-
-int Camera::setCamera(int Width,int Height,double Fx,double Fy,double Cx,double Cy)
-{
-    width=Width;
-    height=Height;
-    fx=Fx;
-    fy=Fy;
-    cx=Cx;
-    cy=Cy;
-    if(isValid())
+    if(name.size())
     {
-        fx_inv=1.0/fx;
-        fy_inv=1.0/fy;
-        return 0;
-    }
-    else
-    {
-//        MSG_ERROR("Wrong focal length detected. Please check the camera parament.");
-        return -1;
+        *this=createFromName(name);
     }
 }
 
-bool Camera::fromFile(std::string file_name)
-{
-    Svar cameraFile;
-    cameraFile.ParseFile(file_name);
-    if(cameraFile.exist("Paraments"))
-    {
-        VecParament para;
-        cameraFile.get_var("Paraments",para);
-        if(para.size()!=6)
-        {
-            MSG_ERROR("Paraments number should be exactly 6.");
-            return false;
-        }
-        width=para[0];height=para[1];
-        fx=para[2];fy=para[3];
-        cx=para[4];cy=para[5];
-    }
-    else if(cameraFile.exist("fx"))
-    {
-        fx=cameraFile.GetDouble("fx",fx);
-        fy=cameraFile.GetDouble("fy",fy);
-        cx=cameraFile.GetDouble("cx",cx);
-        cy=cameraFile.GetDouble("cy",cy);
-        width=cameraFile.GetInt("width",width);
-        height=cameraFile.GetInt("height",height);
-    }
-    cameraFile.clear();
-    setCamera(width,height,fx,fy,cx,cy);
-    return true;
-}
+Camera::Camera(SPtr<CameraImpl>& Impl):impl(Impl)
+{}
 
-void Camera::applyScale(double scale)
+std::string Camera::CameraType()
 {
-    width*=scale;
-    height*=scale;
-    fx*=scale;
-    fy*=scale;
-    cx*=scale;
-    cy*=scale;
-
-    setCamera(width,height,fx,fy,cx,cy);
-}
-
-Camera* Camera::getCopy()
-{
-    Camera* p=new Camera;
-    *p=*this;
-    return p;
+    return impl->CameraType();
 }
 
 std::string Camera::info()
 {
-    stringstream sst;
-    sst << CameraType() << " [" << Width() << " " << Height() << " "
-        << Fx() << " " << Fy() << " "
-        << Cx() << " " << Cy() << "]";
-    return sst.str();
+    return impl->info();
 }
 
-CameraANTA::CameraANTA():w(0),useDistortion(false)
+bool Camera::applyScale(double scale)
 {
-
+    return impl->applyScale(scale);
 }
 
-CameraANTA::CameraANTA(std::string file_name)
+bool Camera::isValid()
 {
-    fromFile(file_name);
+    return impl.get()&&impl->isValid();
 }
 
-std::string CameraANTA::info()
+Point2d Camera::Project(const Point3d& p3d)
 {
-    stringstream sst;
-    sst << CameraType()
-        << " [" << Width() << " " << Height() << " "
-        << Fx() << " " << Fy() << " " << Cx() << " " << Cy() << " "
-        << W() << "]";
-
-    return sst.str();
+    return impl->Project(p3d);
 }
 
-CameraANTA::CameraANTA(int Width,int Height,double Fx,double Fy,double Cx,double Cy,double W)
+Point3d Camera::UnProject(const Point2d& p2d)
 {
-    setCameraANTA(Width,Height,Fx,Fy,Cx,Cy,W);
+    return impl->UnProject(p2d);
 }
 
-int CameraANTA::setCameraANTA(int Width,int Height,double Fx,double Fy,double Cx,double Cy,double W)
+int Camera::width()
 {
-    setCamera(Width,Height,Fx,Fy,Cx,Cy);
-    w=W;
-    refreshParaments();
+    return impl->w;
 }
 
-void CameraANTA::refreshParaments()
+int Camera::height()
 {
-    setCamera(width,height,fx,fy,cx,cy);
-    if(w!= 0.0)
+    return impl->h;
+}
+
+Camera Camera::createFromName(const std::string& name)
+{
+    SPtr<CameraImpl> impl_result=SPtr<CameraImpl>(new CameraImpl());;
+    if( Path::pathExist(name) )  //try to read as file
     {
-        tan2w = 2.0 * tan(w / 2.0);
-        tan2w_inv=1.0/tan2w;
-        w_inv = 1.0 / w;
-        useDistortion = 1.0;
+        Svar config;
+        if(config.ParseFile(name)==0)
+        {
+            config.clear();
+            return Camera(impl_result);
+        }
+
+        string cameraType=config.GetString("CameraType","NoCamera");
+        if(cameraType=="NoCamera") {
+            config.clear();return Camera(impl_result);
+        }
+        else if(cameraType=="PinHole"||cameraType=="Pinhole")
+        {
+            CameraPinhole* camera=new CameraPinhole();
+            camera->fx=config.GetDouble("fx",camera->fx);
+            camera->fy=config.GetDouble("fy",camera->fy);
+            camera->cx=config.GetDouble("cx",camera->cx);
+            camera->cy=config.GetDouble("cy",camera->cy);
+            impl_result=SPtr<CameraImpl>(camera);
+        }
+        else if(cameraType=="PTAM"||cameraType=="ANTA")
+        {
+            CameraANTA* camera=new CameraANTA();
+            camera->fx=config.GetDouble("fx",camera->fx);
+            camera->fy=config.GetDouble("fy",camera->fy);
+            camera->cx=config.GetDouble("cx",camera->cx);
+            camera->cy=config.GetDouble("cy",camera->cy);
+            camera->d=config.GetDouble("w",camera->d);
+            impl_result=SPtr<CameraImpl>(camera);
+        }
+        else if(cameraType=="OpenCV")
+        {
+            CameraOpenCV* camera=new CameraOpenCV();
+            camera->fx=config.GetDouble("fx",camera->fx);
+            camera->fy=config.GetDouble("fy",camera->fy);
+            camera->cx=config.GetDouble("cx",camera->cx);
+            camera->cy=config.GetDouble("cy",camera->cy);
+            camera->k1=config.GetDouble("k1",camera->k1);
+            camera->k2=config.GetDouble("k2",camera->k1);
+            camera->p1=config.GetDouble("p1",camera->p1);
+            camera->p2=config.GetDouble("p2",camera->p2);
+            camera->k3=config.GetDouble("k3",camera->k3);
+            impl_result=SPtr<CameraImpl>(camera);
+        }
+        else if(cameraType=="OCAM")
+        {
+            impl_result=SPtr<CameraOCAM>(new CameraOCAM(name));
+        }
+        else if(cameraType=="Ideal"){
+            impl_result=SPtr<CameraIdeal>(new CameraIdeal());
+        }
+        impl_result->w=config.GetDouble("width",impl_result->w);
+        impl_result->h=config.GetDouble("height",impl_result->h);
+        config.clear();
+        if(impl_result->isValid())
+        {
+            impl_result->refreshParaments();
+            return Camera(impl_result);
+        }
+        else
+        {
+            return Camera();
+        }
     }
-    else
+    else//try to read from name
     {
-        w_inv = 0.0;
-        tan2w = 0.0;
-        useDistortion = false;
-    }
-}
+        if(!svar.exist(name+".CameraType"))
+        {
+            cout<<"Can't find paraments for Camera "<<name<<endl;
+            return Camera();
+        }
 
-bool CameraANTA::fromFile(std::string file_name)
-{
-    Svar cameraFile;
-    cameraFile.ParseFile(file_name);
-
-    string Type=cameraFile.GetString("CameraType","PTAM");
-    if(Type!="PTAM"&&Type!="ANTA")
-    {
-        printf("Not the right CameraType!");
-        return false;
-    }
-    if(cameraFile.exist("Paraments"))
-    {
+        string cameraType=svar.GetString(name+".CameraType","NoCamera");
         VecParament para;
-        cameraFile.get_var("Paraments",para);
-        if(para.size()!=7)
+        if(svar.exist(name+".Paraments"))
         {
-            MSG_ERROR("Paraments number should be exactly 6.");
-            return false;
-        }
-        width=para[0];height=para[1];
-        fx=para[2];fy=para[3];
-        cx=para[4];cy=para[5];
-        w=para[6];
-        if(cx<1)
-        {
-            fx*=width;cx*=width;
-            fy*=height;cy*=height;
-        }
-    }
-    else if(cameraFile.exist("fx"))
-    {
-        width=cameraFile.GetInt("width",width);
-        height=cameraFile.GetInt("height",height);
-        fx=cameraFile.GetDouble("fx",fx);
-        fy=cameraFile.GetDouble("fy",fy);
-        cx=cameraFile.GetDouble("cx",cx);
-        cy=cameraFile.GetDouble("cy",cy);
-        w=cameraFile.GetDouble("w",0);
-    }
-
-    cameraFile.clear();
-    refreshParaments();
-}
-
-
-CameraOpenCV::CameraOpenCV()
-{
-
-}
-
-CameraOpenCV::CameraOpenCV(std::string file_name)
-{
-    fromFile(file_name);
-}
-
-CameraOpenCV::CameraOpenCV(int Width,int Height,
-                           double Fx,double Fy,double Cx,double Cy,
-                           double K1,double K2,double P1,double P2,double K3)
-{
-    setCameraOpenCV(Width,Height,Fx,Fy,Cx,Cy,K1,K2,P1,P2,K3);
-}
-
-std::string CameraOpenCV::info()
-{
-    stringstream sst;
-
-    sst << CameraType() <<" [" << Width() << " " << Height() << " "
-        << Fx() << " " << Fy() << " "
-        << Cx() << " " << Cy() << " "
-        << k1 << " " << k2 << " "
-        << p1 << " " << p2 << " " << k3 << "]";
-    return sst.str();
-}
-
-void CameraOpenCV::setCameraOpenCV(int Width,int Height,
-                     double Fx,double Fy,double Cx,double Cy,
-                     double K1,double K2,double P1,double P2,double K3)
-{
-    setCamera(Width,Height,Fx,Fy,Cx,Cy);
-    setDistortion(K1,K2,P1,P2,K3);
-}
-
-bool CameraOpenCV::fromFile(std::string file_name)
-{
-    Svar cameraFile;
-    cameraFile.ParseFile(file_name);
-    if(cameraFile.GetString("CameraType","OpenCV")!="OpenCV")
-    {
-        printf("Not the right CameraType!");
-        return false;
-    }
-    if(cameraFile.exist("Paraments"))
-    {
-        VecParament para;
-        cameraFile.get_var("Paraments",para);
-        if(para.size()!=11)
-        {
-            MSG_ERROR("Paraments number should be exactly 6.");
-            return false;
-        }
-        width=para[0];height=para[1];
-        fx=para[2];fy=para[3];
-        cx=para[4];cy=para[5];
-        k1=para[6];k2=para[7];p1=para[8];p2=para[9];k3=para[10];
-    }
-    else if(cameraFile.exist("fx"))
-    {
-        width=cameraFile.GetInt("width",width);
-        height=cameraFile.GetInt("height",height);
-        fx=cameraFile.GetDouble("fx",0);
-        fy=cameraFile.GetDouble("fy",0);
-        cx=cameraFile.GetDouble("cx",0);
-        cy=cameraFile.GetDouble("cy",0);
-        k1=cameraFile.GetDouble("k1",0);
-        k2=cameraFile.GetDouble("k2",0);
-        p1=cameraFile.GetDouble("p1",0);
-        p2=cameraFile.GetDouble("p2",0);
-        k3=cameraFile.GetDouble("k3",0);
-        setCamera();
-    }
-    else
-    {
-        return false;
-    }
-    cameraFile.clear();
-}
-
-Point2D CameraOpenCV::UnProject(const double &x, const double &y)
-{
-#ifdef HAS_OPENCV
-    if(!cam_k.data)
-    {
-        cam_k=(cv::Mat_<float>(3, 3)
-               << fx, 0.0, cx,
-                  0.0, fy, cy,
-                  0.0,0.0, 1.0);
-        cam_d=(cv::Mat_<float>(1, 5) << k1, k2, p1, p2, k3);
-    }
-    cv::Point2d uv(x,y),px;
-    const cv::Mat src_pt(1, 1, CV_64FC2, &uv);
-    cv::Mat dst_pt(1, 1, CV_64FC2, &px);
-    cv::undistortPoints(src_pt, dst_pt, cam_k, cam_d);
-    return *(Point2D*)&px;
-#else
-    Point2D result=Camera::UnProject(x,y);
-
-    double r2,r4,r6;
-    r2=result.x*result.x+result.y*result.y;
-    r4=r2*r2;
-    r6=r4*r2;
-    double& X=result.x;
-    double& Y=result.y;
-
-    double a,b0,b,c;
-    b0=1+k1*r2+k2*r4+k3*r6;
-    a=2.0*p2;
-    b=b0+2.0*p1*Y;
-    c=p2*r2-X;
-    if(a*a>0.0000001) result.x= (sqrt(b*b-4.0*a*c)-b)/(a*2.0);
-
-    a=2.0*p1;
-    b=b0+2.0*p2*X;
-    c=p1*r2-Y;
-    if(a*a>0.0000001) result.y= (sqrt(b*b-4.0*a*c)-b)/(a*2.0);
-
-    return result;
-#endif
-}
-
-Camera* GetCameraFromFile(string camera_file)
-{
-    Svar config;
-    config.ParseFile(camera_file);
-
-    string cameraType=config.GetString("CameraType","PinHole");
-    config.clear();
-    cout<<"new "<<cameraType<<" camera.\n";
-    if(cameraType=="PTAM"||cameraType=="ANTA")
-    {
-        return new CameraANTA(camera_file);
-    }
-    else if(cameraType=="OpenCV")
-    {
-        return new CameraOpenCV(camera_file);
-    }
-    else return new Camera(camera_file);
-}
-
-Camera* GetCameraFromName(std::string name)
-{
-    if(!svar.exist(name+".CameraType"))
-    {
-        cout<<"Can't find paraments for Camera "<<name<<endl;
-        return NULL;
-    }
-
-    string cameraType=svar.GetString(name+".CameraType","PinHole");
-    bool   hasParaments=0;
-    VecParament para;
-    if(svar.exist(name+".Paraments"))
-    {
-        hasParaments=true;
-        para=svar.get_var(name+".Paraments",para);
-    }
-    int width=svar.GetInt(name+".width",0);
-    int height=svar.GetInt(name+".height",0);
-    double fx=svar.GetDouble(name+".fx",0);
-    double fy=svar.GetDouble(name+".fy",0);
-    double cx=svar.GetDouble(name+".cx",0);
-    double cy=svar.GetDouble(name+".cy",0);
-
-    if(cameraType=="PTAM"||cameraType=="ANTA")
-    {
-        double w=svar.GetDouble(name+".w",0);
-        if(hasParaments&&para.size()==7)
-        {
-            double scalex=1,scaley=1;
-            width=para[0];height=para[1];w=para[6];
-            if(para[4]>0&&para[4]<1)
+            para=svar.get_var(name+".Paraments",para);
+            if((cameraType=="ANTA"||cameraType=="ATAN"||cameraType=="PTAM")&&para.size()==7)
             {
-                scalex=width;
-                scaley=height;
+                impl_result=SPtr<CameraImpl>(new CameraANTA(para[0],para[1],
+                        para[2],para[3],para[4],para[5],para[6]));
             }
-            fx=para[2]*scalex;
-            fy=para[3]*scaley;
-            cx=para[4]*scalex;
-            cy=para[5]*scaley;
+            else if(cameraType=="OpenCV"&&para.size()==11)
+            {
+                impl_result=SPtr<CameraImpl>(new CameraOpenCV(para[0],para[1],
+                        para[2],para[3],para[4],para[5],
+                        para[6],para[7],para[8],para[9],para[10]));
+            }
+            if((cameraType=="PinHole"||cameraType=="Pinhole")&&para.size()==6)
+            {
+                impl_result=SPtr<CameraImpl>(new CameraPinhole(para[0],para[1],
+                        para[2],para[3],para[4],para[5]));
+            }
+            else if(cameraType=="OCAM")
+            {
+                impl_result=SPtr<CameraOCAM>(new CameraOCAM(svar.GetString(name+".File","")));
+            }
+            else if(cameraType=="Ideal")
+            {
+                impl_result=SPtr<CameraIdeal>(new CameraIdeal());
+            }
         }
-        return new CameraANTA(width,height,fx,fy,cx,cy,w);
-    }
-    else if(cameraType=="OpenCV")
-    {
-        if(hasParaments&&para.size()==11)
-            return new CameraOpenCV(para[0],para[1],para[2],para[3],para[4],para[5],
-                    para[6],para[7],para[8],para[9],para[10]);
         else
-            return new CameraOpenCV(width,height,fx,fy,cx,cy,
-                              svar.GetDouble(name+".k1",0),
-                              svar.GetDouble(name+".k2",0),
-                              svar.GetDouble(name+".p1",0),
-                              svar.GetDouble(name+".p2",0),
-                              svar.GetDouble(name+".k3",0));
-    }
-    else if(cameraType=="OCAM")
-    {
-        return new CameraOCAM(svar.GetString(name+".File","calib_results.txt"));
-    }
-    else
-    {
-        if(hasParaments&&para.size()==6)
-            return new Camera(para[0],para[1],para[2],para[3],para[4],para[5]);
+        {
+            int width=svar.GetInt(name+".width",0);
+            int height=svar.GetInt(name+".height",0);
+            double fx=svar.GetDouble(name+".fx",0);
+            double fy=svar.GetDouble(name+".fy",0);
+            double cx=svar.GetDouble(name+".cx",0);
+            double cy=svar.GetDouble(name+".cy",0);
+            double w=svar.GetDouble(name+".w",0);
+            double k1=svar.GetDouble(name+".k1",0);
+            double k2=svar.GetDouble(name+".k2",0);
+            double p1=svar.GetDouble(name+".p1",0);
+            double p2=svar.GetDouble(name+".p2",0);
+            double k3=svar.GetDouble(name+".k3",0);
+
+            if((cameraType=="ANTA"||cameraType=="PTAM"))
+            {
+                impl_result=SPtr<CameraImpl>(new CameraANTA(width,height,fx,fy,cx,cy,w));
+            }
+            else if(cameraType=="OpenCV")
+            {
+                impl_result=SPtr<CameraImpl>(new CameraOpenCV(width,height,fx,fy,cx,cy,
+                                                              k1,k2,p1,p2,k3));
+            }
+            if((cameraType=="PinHole"||cameraType=="Pinhole"))
+            {
+                impl_result=SPtr<CameraImpl>(new CameraPinhole(width,height,fx,fy,cx,cy));
+            }
+            else if(cameraType=="OCAM")
+            {
+                impl_result=SPtr<CameraOCAM>(new CameraOCAM(svar.GetString(name+".File","")));
+            }
+        }
+
+        if(impl_result->isValid())
+        {
+            impl_result->refreshParaments();
+            return Camera(impl_result);
+        }
         else
-            return new Camera(width,height,fx,fy,cx,cy);
+        {
+            return Camera();
+        }
     }
+    return Camera();
 }
 
-Camera* GetCopy(Camera* camera)
-{
-    if( camera == NULL )
-        return NULL;
-
-    string cameraType=camera->CameraType();
-    if(cameraType=="PTAM"||cameraType=="ANTA")
-    {
-        CameraANTA* p=new CameraANTA;
-        *p=*(CameraANTA*)camera;
-        return p;
-    }
-    else if(cameraType=="OpenCV")
-    {
-        CameraOpenCV* p=new CameraOpenCV;
-        *p=*(CameraOpenCV*)camera;
-        return p;
-    }
-    else if(cameraType=="OCAM")
-    {
-        CameraOCAM* p=new CameraOCAM;
-        *p=*(CameraOCAM*)camera;
-        return p;
-    }
-    else
-    {
-        Camera* p=new Camera;
-        *p=*camera;
-        return p;
-    }
 }

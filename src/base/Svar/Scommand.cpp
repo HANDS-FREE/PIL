@@ -38,7 +38,7 @@ void buildInHandle(void* ptr, string command, string sParams)
 
 void systemFunction(void* ,string ,string sParams)
 {
-    system(sParams.c_str());
+    svar.i["System.Result"]=system(sParams.c_str());
 }
 
 Scommand::Scommand():data(SvarWithType<CallbackVector>::instance())

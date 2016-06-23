@@ -1,6 +1,9 @@
 #ifndef POINT_H
 #define POINT_H
+
 #include <iostream>
+#include <math.h>
+
 #ifdef HAS_TOON
 #include <TooN/TooN.h>
 #endif
@@ -200,4 +203,5 @@ typedef Point3_<float>  Point3f;
 typedef Point3_<double> Point3d;
 typedef Point3_<int>    Point3i;
 }
+
 #endif // POINT_H

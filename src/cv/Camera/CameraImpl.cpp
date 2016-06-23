@@ -1,13 +1,12 @@
 #include "CameraImpl.h"
-
+#include <fstream>
 //#define __SSE3__
 #ifdef __SSE3__
 #include "pmmintrin.h"
 #endif
 
-namespace pi
-{
-namespace hardware {
+namespace pi{
+
 std::string CameraPinhole::info()
 {
     std::stringstream sst;
@@ -16,7 +15,7 @@ std::string CameraPinhole::info()
     return sst.str();
 }
 
-int CameraPinhole::applyScale(double scale){fx*=scale;fy*=scale;cx*scale;cy*=scale;return 0;}
+bool CameraPinhole::applyScale(double scale){fx*=scale;fy*=scale;cx*=scale;cy*=scale;return true;}
 
 bool CameraPinhole::isValid(){return w>0&&h>0&&fx!=0&&fy!=0;}
 
@@ -57,10 +56,10 @@ Point3d CameraPinhole::UnProject(const Point2d& p2d)
     return Point3d((p2d.x-cx)*fx_inv,(p2d.y-cy)*fy_inv,1.);
 }
 
-CameraATAN::CameraATAN():fx(0),fy(0),fx_inv(0),fy_inv(0),cx(0),cy(0),d(0){}
+CameraATAN::CameraATAN():fx(0),fy(0),cx(0),cy(0),d(0),fx_inv(0),fy_inv(0){}
 
 CameraATAN::CameraATAN(int _w,int _h,double _fx,double _fy,double _cx,double _cy,double _d)
-    :CameraImpl(_w,_h),fx(_fx),fy(_fy),fx_inv(0),fy_inv(0),cx(_cx),cy(_cy),d(_d)
+    :CameraImpl(_w,_h),fx(_fx),fy(_fy),cx(_cx),cy(_cy),d(_d),fx_inv(0),fy_inv(0)
 {refreshParaments();}
 
 
@@ -99,8 +98,8 @@ int CameraATAN::refreshParaments()
     return 0;
 }
 
-int CameraATAN::applyScale(double scale)
-{fx*=scale;fy*=scale;cx*scale;cy*=scale;return 0;}
+bool CameraATAN::applyScale(double scale)
+{fx*=scale;fy*=scale;cx*=scale;cy*=scale;return true;}
 
 Point2d CameraATAN::Project(const Point3d& p3d)
 {
@@ -172,6 +171,7 @@ Point2d CameraATAN::Project(const Point3d& p3d)
         }
     }
 #endif
+    return Point2d(-1,-1);// let compiler happy
 }
 
 Point3d CameraATAN::UnProject(const Point2d& p2d)
@@ -201,7 +201,7 @@ std::string CameraOpenCV::info()
     return sst.str();
 }
 
-int CameraOpenCV::applyScale(double scale){fx*=scale;fy*=scale;cx*scale;cy*=scale;return 0;}
+bool CameraOpenCV::applyScale(double scale){fx*=scale;fy*=scale;cx*=scale;cy*=scale;return true;}
 
 int CameraOpenCV::refreshParaments()
 {
@@ -281,67 +281,36 @@ return result;
 }
 
 CameraOCAM::CameraOCAM(const std::string& filename)
-    :length_invpol(0),length_pol(0)
+    :length_pol(0),length_invpol(0)
 {
-    double *pol        = this->pol;
-    double *invpol     = this->invpol;
-    double *xc         = &this->cy;
-    double *yc         = &this->cx;
-    double *c          = &this->c;
-    double *d          = &this->d;
-    double *e          = &this->e;
-    int    *width      = &this->w;
-    int    *height     = &this->h;
-    int *length_pol    = &this->length_pol;
-    int *length_invpol = &this->length_invpol;
-    FILE *f;
-    char buf[1024];
-    int i;
-
-    //Open file
-    const int CMV_MAX_BUF=1024;
-    if(!(f=fopen(filename.c_str(),"r")))
     {
-      printf("File %s cannot be opened\n", filename.c_str());
-      return ;
+        std::ifstream ifs(filename.c_str());
+        if(!ifs.is_open())
+        {
+            printf("File %s cannot be opened\n", filename.c_str());
+            return;
+        }
+
+        std::string line;
+        if(!std::getline(ifs,line)) return;
+        ifs>>length_pol;
+        for(int i=0;i<length_pol;i++)
+        {
+            ifs>>pol[i];
+        }
+        if(!std::getline(ifs,line)) return;
+        ifs>>length_invpol;
+        for(int i=0;i<length_invpol;i++)
+        {
+            ifs>>invpol[i];
+        }
+        if(!std::getline(ifs,line)) return;
+        ifs>>cx>>cy;
+        if(!std::getline(ifs,line)) return;
+        ifs>>c>>d>>e;
+        if(!std::getline(ifs,line)) return;
+        ifs>>h>>w;
     }
-
-    //Read polynomial coefficients
-    fgets(buf,1024,f);
-    fscanf(f,"\n");
-    fscanf(f,"%d", length_pol);
-    for (i = 0; i < *length_pol; i++)
-    {
-        fscanf(f," %lf",&pol[i]);
-    }
-
-    //Read inverse polynomial coefficients
-    fscanf(f,"\n");
-    fgets(buf,CMV_MAX_BUF,f);
-    fscanf(f,"\n");
-    fscanf(f,"%d", length_invpol);
-    for (i = 0; i < *length_invpol; i++)
-    {
-        fscanf(f," %lf",&invpol[i]);
-    }
-
-    //Read center coordinates
-    fscanf(f,"\n");
-    fgets(buf,CMV_MAX_BUF,f);
-    fscanf(f,"\n");
-    fscanf(f,"%lf %lf\n", xc, yc);
-
-    //Read affine coefficients
-    fgets(buf,CMV_MAX_BUF,f);
-    fscanf(f,"\n");
-    fscanf(f,"%lf %lf %lf\n", c,d,e);
-
-    //Read image size
-    fgets(buf,CMV_MAX_BUF,f);
-    fscanf(f,"\n");
-    fscanf(f,"%d %d", height, width);
-
-    fclose(f);
 }
 
 std::string CameraOCAM::info()
@@ -418,4 +387,4 @@ Point3d CameraOCAM::UnProject(const Point2d& point)
     return Point3d(invnorm*xp,invnorm*yp,-invnorm*zp);
 }
 
-}}
+}

@@ -1,10 +1,9 @@
-#include <base/Svar/Svar_Inc.h>
-#include <base/time/Global_Timer.h>
-#include <base/types/Random.h>
+#include <base/Svar/Svar.h>
+#include <base/Time/Global_Timer.h>
+#include <base/Types/Random.h>
 
-#include <hardware/Camera/Camera.h>
-#include <hardware/Camera/Cameras.h>
-#include <hardware/Camera/Undistorter.h>
+#include <cv/Camera/Camera.h>
+#include <cv/Camera/Undistorter.h>
 
 #include <opencv2/highgui/highgui.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
@@ -56,6 +55,7 @@ bool VIKITCamera(vk::AbstractCamera* camera,string name)
 }
 #endif
 
+#if 0
 bool CameraTest(Camera* camera)
 {
     if(!camera) return false;
@@ -99,8 +99,9 @@ bool CameraTest(Camera* camera)
     cout<<"Everage Error:"<<sum/times<<endl;
 
 }
+#endif
 
-bool CameraTest(pi::hardware::Camera camera)
+bool CameraTest(pi::Camera camera)
 {
     if(!camera.isValid()) return false;
 
@@ -142,7 +143,7 @@ bool CameraTest(pi::hardware::Camera camera)
     for(int i=0;i<times;i++)
         sum+=(vec_p[i]-vec_re[i]).norm();
     cout<<"Everage Error:"<<sum/times<<endl;
-
+    return true;
 }
 
 int main(int argc,char** argv)
@@ -157,20 +158,8 @@ int main(int argc,char** argv)
         ;
     timer.leave("DoNothing");
 
-    Camera pinhole=*GetCameraFromName("GoProIdeaM1080");
-    CameraTest(&pinhole);
-    CameraTest(pi::hardware::Camera::createFromName("GoProIdeaM1080"));
-
-    CameraANTA anta=*(CameraANTA*)GetCameraFromName("GoProMiddle1080");
-    CameraTest(&anta);
-    CameraTest(pi::hardware::Camera::createFromName("GoProMiddle1080"));
-
-    CameraOpenCV cv_cam=*(CameraOpenCV*)GetCameraFromName("GoProMiddle1080CV");
-    CameraTest(&cv_cam);
-    CameraTest(pi::hardware::Camera::createFromName("GoProMiddle1080CV"));
-
     {
-        pi::hardware::Camera camera=pi::hardware::Camera::createFromName("GoProFISH");
+        pi::Camera camera=pi::Camera::createFromName("GoProFISH");
         cout<<camera.info()<<endl;
         CameraTest(camera);
     }
@@ -191,14 +180,8 @@ int main(int argc,char** argv)
     VIKITCamera(&vk_cv,cv_cam.CameraType()+"::VK");
 #endif
 
-    cout<<pinhole.info()<<endl;
-    pinhole.applyScale();
-    cout<<pinhole.info()<<endl;
-
-//    Undistorter undis(GetCopy(&anta),GetCopy(&pinhole));
-//    if(!undis.valid){cout<<"Undis not valid";return -1;}
-    pi::hardware::Undistorter undis(pi::hardware::Camera(svar.GetString("Undis.CameraIn","GoProFISH")),
-                                    pi::hardware::Camera(svar.GetString("Undis.CameraOut","GoProIdeaM1080")));
+    pi::Undistorter undis(pi::Camera(svar.GetString("Undis.CameraIn","GoProFISH")),
+                                    pi::Camera(svar.GetString("Undis.CameraOut","GoProIdeaM1080")));
 
     if(!undis.valid()) {cout<<"Undis not valid";return -1;}
 

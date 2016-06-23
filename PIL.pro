@@ -85,7 +85,10 @@ HEADERS += src/base/base.h \
     src/hardwares/UART/UART.h \
     src/base/Types/RingBuffer.h \
     src/hardwares/Gps/GPS.h \
-    src/hardwares/Gps/PathTable.h
+    src/hardwares/Gps/PathTable.h \
+    src/cv/Camera/Camera.h \
+    src/cv/Camera/CameraImpl.h \
+    src/cv/Camera/Undistorter.h
 
 SOURCES += \
     src/base/Thread/Thread_POSIX.cpp \
@@ -136,4 +139,8 @@ SOURCES += \
     src/gui/widgets/qFlightInstruments.cpp \
     src/gui/widgets/SvarTable.cpp \
     src/hardwares/UART/UART.cpp \
-    src/hardwares/Gps/GPS.cpp
+    src/hardwares/Gps/GPS.cpp \
+    src/cv/Camera/Camera.cpp \
+    src/cv/Camera/CameraImpl.cpp \
+    src/cv/Camera/Undistorter.cpp \
+    apps/CameraTest/main.cpp
