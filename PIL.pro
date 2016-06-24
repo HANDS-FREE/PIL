@@ -82,13 +82,24 @@ HEADERS += src/base/base.h \
     src/gui/widgets/qcustomplot.h \
     src/gui/widgets/qFlightInstruments.h \
     src/gui/widgets/SvarTable.h \
-    src/hardwares/UART/UART.h \
     src/base/Types/RingBuffer.h \
-    src/hardwares/Gps/GPS.h \
-    src/hardwares/Gps/PathTable.h \
     src/cv/Camera/Camera.h \
     src/cv/Camera/CameraImpl.h \
-    src/cv/Camera/Undistorter.h
+    src/cv/Camera/Undistorter.h \
+    src/hardware/Gps/GPS.h \
+    src/hardware/Gps/PathTable.h \
+    src/hardware/UART/UART.h \
+    src/network/NetException.h \
+    src/network/Net.h \
+    src/network/SocketDefs.h \
+    src/network/IPAddressImpl.h \
+    src/base/Types/RefCountedObject.h \
+    src/network/IPAddress.h \
+    src/base/Types/String.h \
+    src/base/Types/TypeList.h \
+    src/base/Types/MetaProgramming.h \
+    src/base/Types/Tuple.h \
+    src/network/SocketAddressImpl.h
 
 SOURCES += \
     src/base/Thread/Thread_POSIX.cpp \
@@ -143,4 +154,12 @@ SOURCES += \
     src/cv/Camera/Camera.cpp \
     src/cv/Camera/CameraImpl.cpp \
     src/cv/Camera/Undistorter.cpp \
-    apps/CameraTest/main.cpp
+    apps/CameraTest/main.cpp \
+    src/hardware/Gps/GPS.cpp \
+    src/hardware/UART/UART.cpp \
+    src/network/NetException.cpp \
+    src/network/Net.cpp \
+    src/network/IPAddressImpl.cpp \
+    src/network/IPAddress.cpp \
+    src/base/Types/String.cpp \
+    src/network/SocketAddressImpl.cpp

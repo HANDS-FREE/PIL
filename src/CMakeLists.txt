@@ -1,10 +1,5 @@
-add_subdirectory(base)
+set(LIB_MODULES base network hardware gui cv)
 
-if(WITH_NETWORK)
-add_subdirectory(network)
-endif()
-
-add_subdirectory(hardware)
-add_subdirectory(gui)
-add_subdirectory(cv)
-
+foreach(LIB_NAME ${LIB_MODULES})
+add_subdirectory(${LIB_NAME})
+endforeach()

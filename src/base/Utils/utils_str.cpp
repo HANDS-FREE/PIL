@@ -7,7 +7,7 @@
 #include <iomanip>
 
 #include "utils_str.h"
-
+#include "base/Environment.h"
 
 using namespace std;
 
@@ -280,6 +280,23 @@ std::string dtos(const double &i, int precision)
     ostringstream ost;
     ost<<setiosflags(ios::fixed)<<setprecision(precision)<<i;
     return ost.str();
+}
+
+std::string buf2HexStr(u_char* buf,size_t size)
+{
+    char result[size*2];
+    const char* HEX_LUT="0123456789ABCDEF";
+    for(size_t i=0;i<size;i++)
+    {
+#if PIL_ARCH_LITTLE_ENDIAN
+        u_char c=buf[size-1-i];
+#else
+        u_char c=buf[i];
+#endif
+        result[i<<1]  =(HEX_LUT[c>>4]);
+        result[(i<<1)+1]=(HEX_LUT[c&0x0F]);
+    }
+    return result;
 }
 
 } // end of namespace pi

@@ -63,7 +63,7 @@ ELSE(WIN32) # Linux
 	)
 
 
-	set(OPENCV_MODULES2FIND opencv_core opencv_highgui opencv_imgproc opencv_calib3d opencv_features2d opencv_ocl opencv_gpu opencv_legacy opencv_superres opencv_videostab opencv_ml opencv_contrib bopencv_flann opencv_photo opencv_objdetect opencv_stitching)
+	set(OPENCV_MODULES2FIND opencv_core opencv_highgui opencv_imgproc opencv_calib3d opencv_features2d opencv_ocl opencv_gpu opencv_legacy opencv_superres opencv_videostab opencv_ml opencv_contrib opencv_flann opencv_photo opencv_objdetect opencv_stitching)
 
 	foreach (OPENCV_MODULE_NAME ${OPENCV_MODULES2FIND})
 		FIND_LIBRARY(${OPENCV_MODULE_NAME}_LIBRARIES NAMES ${OPENCV_MODULE_NAME}
@@ -80,7 +80,7 @@ ELSE(WIN32) # Linux
 			set(${OPENCV_MODULE_NAME}_FOUND 1)
 			list(APPEND OPENCV_LIBRARIES ${${OPENCV_MODULE_NAME}_LIBRARIES})
 		else(${OPENCV_MODULE_NAME}_LIBRARIES)
-			message("Can't found module "${OPENCV_MODULE_NAME})
+			message("Can't found module " ${OPENCV_MODULE_NAME})
 		endif(${OPENCV_MODULE_NAME}_LIBRARIES)
 	endforeach()
 

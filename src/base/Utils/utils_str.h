@@ -69,6 +69,8 @@ std::string to_str(const T& i)
     return ost.str();
 }
 
+std::string buf2HexStr(u_char* buf,size_t size);
+
 } // end of namespace pi
 
 #endif // end of __UTILS_STR_H__

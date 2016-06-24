@@ -97,8 +97,8 @@ add_subdirectory(apps)
 get_property(LIBS2COMPILE GLOBAL PROPERTY LIBS2COMPILE)
 get_property(APPS2COMPILE GLOBAL PROPERTY APPS2COMPILE)
  
-message("The follow targets are going to be build:")
-message("LIBS(${CMAKE_LIBRARY_OUTPUT_DIRECTORY}): " ${LIBS2COMPILE})
-message("APPS(${CMAKE_RUNTIME_OUTPUT_DIRECTORY}): " ${APPS2COMPILE})
+message(STATUS "The following targets will to be build:")
+message(STATUS "LIBS(${CMAKE_LIBRARY_OUTPUT_DIRECTORY}): " ${LIBS2COMPILE})
+message(STATUS "APPS(${CMAKE_RUNTIME_OUTPUT_DIRECTORY}): " ${APPS2COMPILE})
 
 

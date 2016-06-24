@@ -1,8 +1,8 @@
 #ifndef PATHTABLE_H
 #define PATHTABLE_H
 
-#include <base/types/types.h>
-#include <base/debug/debug_config.h>
+#include <base/Types/types.h>
+#include <base/Debug/Assert.h>
 #include <vector>
 
 // a class for fast access to gps path, the path should be continuable
@@ -12,7 +12,7 @@ public:
     FastPathTable(double step)
         :min_time(-1),step_time(step),max_time(-1)
     {
-        ASSERT2(step<=0,"Step must be positive!");
+        pi_assert2(step<=0,"Step must be positive!");
     }
 
     inline bool Add(double timestamp,const pi::Point3d& pt)

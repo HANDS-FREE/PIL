@@ -65,4 +65,6 @@ struct StaticAssert<true>
     #define pi_dbg_message(...)
 #endif
 
+#define pi_unexpected() pi_dbg_error()
+
 #endif // ASSERT_H
