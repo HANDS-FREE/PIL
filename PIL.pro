@@ -99,7 +99,36 @@ HEADERS += src/base/base.h \
     src/base/Types/TypeList.h \
     src/base/Types/MetaProgramming.h \
     src/base/Types/Tuple.h \
-    src/network/SocketAddressImpl.h
+    src/network/SocketAddressImpl.h \
+    src/network/SocketAddress.h \
+    src/network/HostEntry.h \
+    src/network/DNS.h \
+    src/base/Types/AutoPtr.h \
+    src/network/Socket.h \
+    src/network/SocketImpl.h \
+    src/base/Time/Timespan.h \
+    src/network/StreamSocketImpl.h \
+    src/network/ServerSocket.h \
+    src/network/StreamSocket.h \
+    src/base/Types/Buffer.h \
+    src/base/Types/FIFOBuffer.h \
+    src/base/Thread/NotificationStrategy.h \
+    src/base/Thread/DefaultStrategy.h \
+    src/base/Thread/ActiveResult.h \
+    src/base/Thread/ActiveRunnable.h \
+    src/base/Debug/ErrorHandler.h \
+    src/base/Thread/ThreadPool.h \
+    src/base/Thread/ActiveStarter.h \
+    src/base/Thread/ActiveMethod.h \
+    src/base/Thread/AbstractEvent.h \
+    src/base/Thread/BasicEvent.h \
+    src/base/Thread/AbstractDelegate.h \
+    src/network/ServerSocketImpl.h \
+    src/base/Types/SharedPtr.h \
+    src/network/DatagramSocketImpl.h \
+    src/network/DatagramSocket.h \
+    src/network/EchoServer.h \
+    src/base/Utils/TestCase.h
 
 SOURCES += \
     src/base/Thread/Thread_POSIX.cpp \
@@ -162,4 +191,19 @@ SOURCES += \
     src/network/IPAddressImpl.cpp \
     src/network/IPAddress.cpp \
     src/base/Types/String.cpp \
-    src/network/SocketAddressImpl.cpp
+    src/network/SocketAddressImpl.cpp \
+    src/network/SocketAddress.cpp \
+    src/network/HostEntry.cpp \
+    src/network/DNS.cpp \
+    src/network/Socket.cpp \
+    src/network/SocketImpl.cpp \
+    src/base/Time/Timespan.cpp \
+    src/network/StreamSocketImpl.cpp \
+    src/network/ServerSocket.cpp \
+    src/network/StreamSocket.cpp \
+    src/base/Debug/ErrorHandler.cpp \
+    src/base/Thread/ThreadPool.cpp \
+    src/network/ServerSocketImpl.cpp \
+    src/network/DatagramSocketImpl.cpp \
+    src/network/DatagramSocket.cpp \
+    src/network/EchoServer.cpp

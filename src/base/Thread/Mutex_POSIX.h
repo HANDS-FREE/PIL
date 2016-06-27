@@ -63,7 +63,6 @@ inline void MutexImpl::unlockImpl()
 }
 
 
-} // namespace Poco
-
+} // namespace pi
 
 #endif // PIL_Mutex_POSIX_INCLUDED

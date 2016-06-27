@@ -196,7 +196,7 @@ inline int Ascii::toUpper(int ch)
 }
 
 
-} // namespace Poco
+} // namespace pi
 
 
 #endif // ASCII_H

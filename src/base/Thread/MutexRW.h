@@ -10,9 +10,9 @@
 #else
 #include "MutexRW_WIN32.h"
 #endif
-#elif defined(POCO_ANDROID)
+#elif defined(PIL_ANDROID)
 #include "MutexRW_Android.h"
-#elif defined(POCO_VXWORKS)
+#elif defined(PIL_VXWORKS)
 #include "MutexRW_VX.h"
 #else
 #include "MutexRW_POSIX.h"

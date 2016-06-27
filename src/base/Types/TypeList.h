@@ -437,7 +437,7 @@ struct TypeAllReplacer<TypeList<Head, Tail>, T, R>
 };
 
 
-} // namespace Poco
+} // namespace pi
 
 
 #endif // Foundation_TypeList_INCLUDED

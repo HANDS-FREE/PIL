@@ -60,6 +60,8 @@ public:
     ~Thread();
         /// Destroys the thread.
 
+    virtual void run(){}
+
     int id() const;
         /// Returns the unique thread ID of the thread.
 
@@ -336,6 +338,6 @@ inline Thread::TID Thread::currentTid()
 }
 
 
-} // namespace Poco
+} // namespace pi
 
 #endif // Foundation_Thread_INCLUDED

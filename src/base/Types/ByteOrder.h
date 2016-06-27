@@ -219,7 +219,6 @@ PIL_IMPLEMENT_BYTEORDER_LIT(toLittleEndian)
 PIL_IMPLEMENT_BYTEORDER_LIT(fromLittleEndian)
 
 
-} // namespace Poco
-
+} // namespace pi
 
 #endif // Foundation_ByteOrder_INCLUDED

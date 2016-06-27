@@ -42,7 +42,7 @@
 //
 #if defined(_MSC_VER)
 	#if !defined(PIL_NO_AUTOMATIC_LIBS) && !defined(PIL_EXPORTS)
-		#if defined(POCO_DLL)
+        #if defined(PIL_DLL)
 			#if defined(_DEBUG)
 				#pragma comment(lib, "pi_based.lib")
 			#else

@@ -304,14 +304,14 @@ public:
         /// Otherwise false is returned and the path argument remains unchanged.
 
     static std::string transcode(const std::string& path);
-        /// On Windows, if POCO has been compiled with Windows UTF-8 support
-        /// (POCO_WIN32_UTF8), this function converts a string (usually containing a path)
+        /// On Windows, if PIL has been compiled with Windows UTF-8 support
+        /// (PIL_WIN32_UTF8), this function converts a string (usually containing a path)
         /// encoded in UTF-8 into a string encoded in the current Windows code page.
         ///
         /// This function should be used for every string passed as a file name to
         /// a string stream or fopen().
         ///
-        /// On all other platforms, or if POCO has not been compiled with Windows UTF-8
+        /// On all other platforms, or if PIL has not been compiled with Windows UTF-8
         /// support, this function returns the string unchanged.
 
     static bool pathExist(const std::string& path);
@@ -453,7 +453,7 @@ inline void swap(Path& p1, Path& p2)
 }
 
 
-} // namespace Poco
+} // namespace pi
 
 
 #endif // Path_INCLUDED

@@ -152,9 +152,9 @@
     #define pil_socklen_t       socklen_t
     #define pil_fcntl_request_t int
     #if defined(PIL_OS_FAMILY_BSD)
-        #define PIL_ioctl_request_t unsigned long
+        #define pil_ioctl_request_t unsigned long
     #else
-        #define PIL_ioctl_request_t int
+        #define pil_ioctl_request_t int
     #endif
     #define pil_closesocket(s)  ::close(s)
     #define PIL_EINTR           EINTR

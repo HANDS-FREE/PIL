@@ -37,6 +37,8 @@ struct StaticAssert<true>
         } \
     } while (0);
 
+#define pi_check_ptr(ptr) pi_assert(ptr)
+
 #if defined(_DEBUG)
     #define pi_assert_dbg(f) pi_assert(f)
     #define pi_assert2_dbg(f,s) pi_assert2(f,s)

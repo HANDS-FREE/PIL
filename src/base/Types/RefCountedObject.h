@@ -80,7 +80,7 @@ inline void RefCountedObject::release() const throw()
 }
 
 
-} // namespace Poco
+} // namespace pi
 
 
 #endif // PIL_RefCountedObject_INCLUDED

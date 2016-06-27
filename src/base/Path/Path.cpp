@@ -6,7 +6,7 @@
 #include "Path_VMS.cpp"
 #elif defined(PIL_OS_FAMILY_UNIX)
 #include "Path_UNIX.h"
-#elif defined(PIL_OS_FAMILY_WINDOWS) && defined(POCO_WIN32_UTF8)
+#elif defined(PIL_OS_FAMILY_WINDOWS) && defined(PIL_WIN32_UTF8)
 #if defined(_WIN32_WCE)
 #include "Path_WINCE.cpp"
 #else
@@ -436,7 +436,7 @@ const std::string& Path::directory(size_t n) const
 
 const std::string& Path::operator [] (size_t n) const
 {
-//    poco_assert (0 <= n && n <= _dirs.size());
+    pi_assert (0 <= n && n <= _dirs.size());
 
     if (n < _dirs.size())
         return _dirs[n];
@@ -475,7 +475,7 @@ Path& Path::pushDirectory(const std::string& dir)
 
 Path& Path::popDirectory()
 {
-//    poco_assert (!_dirs.empty());
+    pi_assert (!_dirs.empty());
 
     _dirs.pop_back();
     return *this;
@@ -484,7 +484,7 @@ Path& Path::popDirectory()
 
 Path& Path::popFrontDirectory()
 {
-//    poco_assert (!_dirs.empty());
+    pi_assert (!_dirs.empty());
 
     StringVec::iterator it = _dirs.begin();
     _dirs.erase(it);

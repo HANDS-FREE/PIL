@@ -171,7 +171,7 @@ std::string PathImpl::tempImpl()
 
 std::string PathImpl::nullImpl()
 {
-#if defined(POCO_VXWORKS)
+#if defined(PIL_VXWORKS)
     return "/null";
 #else
     return "/dev/null";
@@ -225,7 +225,7 @@ void PathImpl::listRootsImpl(std::vector<std::string>& roots)
 }
 
 
-} // namespace Poco
+} // namespace pi
 
 #endif // PIL_OS_UNIX
 #endif // PATH_UNIX_H

@@ -15,4 +15,4 @@ MutexRWImpl::~MutexRWImpl()
 }
 
 
-} // namespace Poco
+} // namespace pi
