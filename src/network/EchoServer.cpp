@@ -11,7 +11,7 @@ EchoServer::EchoServer():
     _thread("EchoServer"),
     _stop(false)
 {
-    _thread.start(*this);
+    _thread.start(this);
     _ready.wait();
 }
 

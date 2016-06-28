@@ -4,11 +4,10 @@
 
 #include "../Environment.h"
 #include "Timestamp.h"
+//#include "Timespan.h"
 
 namespace pi {
 
-
-typedef Timestamp::TimeDiff Timespan;
 class PIL_API DateTime
     /// This class represents an instant in time, expressed
     /// in years, months, days, hours, minutes, seconds
@@ -42,6 +41,7 @@ class PIL_API DateTime
 {
 public:
     typedef Timestamp::TimeDiff TimeDiff;
+    typedef Timestamp::TimeDiff Timespan;
     enum Months
         /// Symbolic names for month numbers (1 to 12).
     {

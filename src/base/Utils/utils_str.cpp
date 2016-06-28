@@ -18,6 +18,7 @@ namespace pi {
 /// string functions
 ////////////////////////////////////////////////////////////////////////////////
 
+
 // split given string by delims
 StringArray split_text_cpp(const string &intext, const string &delims)
 {

@@ -21,7 +21,7 @@ struct StaticAssert<true>
 
 #define pi_assert(f)\
     do { \
-        if (!f ) { \
+        if (!(f) ) { \
             fprintf(stderr, "ERROR (FILE: %s, LINE: %d, FUNC: %s)\n", \
                 __FILE__, __LINE__, __FUNCTION__); \
             exit(1); \
@@ -30,7 +30,7 @@ struct StaticAssert<true>
 
 #define pi_assert2(f,s)\
     do { \
-        if (!f ) { \
+        if (!(f) ) { \
             fprintf(stderr, "ERROR: %s (FILE: %s, LINE: %d, FUNC: %s)\n", \
                 s, __FILE__, __LINE__, __FUNCTION__); \
             exit(1); \

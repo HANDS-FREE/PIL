@@ -1,18 +1,3 @@
-//
-// DateTime.cpp
-//
-// $Id: //PIL/1.4/PIL/src/DateTime.cpp#1 $
-//
-// Library: PIL
-// Package: DateTime
-// Module:  DateTime
-//
-// Copyright (c) 2004-2006, Applied Informatics Software Engineering GmbH.
-// and Contributors.
-//
-// SPDX-License-Identifier:	BSL-1.0
-//
-
 #include <algorithm>
 #include <cmath>
 
@@ -270,7 +255,7 @@ DateTime DateTime::operator - (const Timespan& span) const
 }
 
 
-Timespan DateTime::operator - (const DateTime& dateTime) const
+DateTime::Timespan DateTime::operator - (const DateTime& dateTime) const
 {
     return Timespan((_utcTime - dateTime._utcTime)/10);
 }

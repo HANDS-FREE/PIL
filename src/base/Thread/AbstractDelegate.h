@@ -3,10 +3,9 @@
 
 
 #include "../Environment.h"
-
+#include "../Debug/Assert.h"
 
 namespace pi {
-
 
 template <class TArgs>
 class AbstractDelegate
@@ -30,7 +29,7 @@ public:
         /// Returns true if successful, or false if the delegate
         /// has been disabled or has expired.
 
-    virtual bool equals(const AbstractDelegate& other) const = 0;
+    virtual bool equals(const AbstractDelegate& other)const=0;
         /// Compares the AbstractDelegate with the other one for equality.
 
     virtual AbstractDelegate* clone() const = 0;

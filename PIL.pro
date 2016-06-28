@@ -128,7 +128,11 @@ HEADERS += src/base/base.h \
     src/network/DatagramSocketImpl.h \
     src/network/DatagramSocket.h \
     src/network/EchoServer.h \
-    src/base/Utils/TestCase.h
+    src/base/Utils/TestCase.h \
+    src/base/Utils/TestMain.h \
+    src/base/Thread/Expire.h \
+    src/base/Thread/FunctionDelegate.h \
+    src/base/Thread/Delegate.h
 
 SOURCES += \
     src/base/Thread/Thread_POSIX.cpp \
@@ -206,4 +210,8 @@ SOURCES += \
     src/network/ServerSocketImpl.cpp \
     src/network/DatagramSocketImpl.cpp \
     src/network/DatagramSocket.cpp \
-    src/network/EchoServer.cpp
+    src/network/EchoServer.cpp \
+    apps/Tests/SvarTest.cpp \
+    apps/Tests/TestPlugin.cpp \
+    apps/Tests/main.cpp \
+    apps/Tests/SocketTest.cpp

@@ -46,6 +46,7 @@ set(PI_BASE_INCLUDES ${CMAKE_SOURCE_DIR}/src)
 set(PI_BASE_LIBRARIES pi_base)
 set(PI_GUI_LIBRARIES pi_gui)
 set(PI_CV_LIBRARIES pi_cv)
+set(PI_NETWORK_LIBRARIES pi_network)
 #####################################################################
 # Results collection
 macro(PIL_CHECK_DEPENDENCY LIBNAME)
