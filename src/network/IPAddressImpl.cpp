@@ -102,7 +102,7 @@ std::string IPv4AddressImpl::toString() const
 {
     const UInt8* bytes = reinterpret_cast<const UInt8*>(&_addr);
     std::stringstream sst;
-    sst<<bytes[0]<<"."<<bytes[1]<<"."<<bytes[2]<<"."<<bytes[3];
+    sst<<(int)bytes[0]<<"."<<(int)bytes[1]<<"."<<(int)bytes[2]<<"."<<(int)bytes[3];
     return sst.str();
 }
 
@@ -408,9 +408,10 @@ std::string IPv6AddressImpl::toString() const
         else
             result.append("::ffff:");
         const UInt8* bytes = reinterpret_cast<const UInt8*>(&_addr);
-        std::stringstream sst(result);
-        sst<<bytes[12]<<"."<<bytes[13]<<"."<<bytes[14]<<"."<<bytes[15];
-        return sst.str();
+        std::stringstream sst;
+        sst<<(int)bytes[12]<<"."<<(int)bytes[13]<<"."<<(int)bytes[14]<<"."<<(int)bytes[15];
+        result.append(sst.str());
+        return result;
     }
     else
     {

@@ -132,7 +132,21 @@ HEADERS += src/base/base.h \
     src/base/Utils/TestMain.h \
     src/base/Thread/Expire.h \
     src/base/Thread/FunctionDelegate.h \
-    src/base/Thread/Delegate.h
+    src/base/Thread/Delegate.h \
+    src/network/UDPEchoServer.h \
+    src/network/NetworkInterface.h \
+    src/network/TCPServer.h \
+    src/network/MulticastSocket.h \
+    src/network/TCPServerConnection.h \
+    src/network/TCPServerConnectionFactory.h \
+    src/network/TCPServerParams.h \
+    src/base/Thread/Notification.h \
+    src/base/Thread/NotificationQueue.h \
+    src/base/Thread/NotificationCenter.h \
+    src/base/Thread/AbstractObserver.h \
+    src/base/Thread/Observer.h \
+    src/network/TCPServerDispatcher.h \
+    src/network/MulticastEchoServer.h
 
 SOURCES += \
     src/base/Thread/Thread_POSIX.cpp \
@@ -212,6 +226,20 @@ SOURCES += \
     src/network/DatagramSocket.cpp \
     src/network/EchoServer.cpp \
     apps/Tests/SvarTest.cpp \
-    apps/Tests/TestPlugin.cpp \
     apps/Tests/main.cpp \
-    apps/Tests/SocketTest.cpp
+    apps/Tests/SocketTest.cpp \
+    apps/Tests/IPAddressTest.cpp \
+    apps/Tests/SocketAddressTest.cpp \
+    apps/Tests/DNSTest.cpp \
+    apps/Tests/DatagramSocketTest.cpp \
+    src/network/UDPEchoServer.cpp \
+    src/network/NetworkInterface.cpp \
+    src/network/TCPServer.cpp \
+    src/network/MulticastSocket.cpp \
+    src/network/TCPServerConnection.cpp \
+    src/network/TCPServerParams.cpp \
+    src/base/Thread/NotificationQueue.cpp \
+    src/base/Thread/NotificationCenter.cpp \
+    src/network/TCPServerDispatcher.cpp \
+    src/network/MulticastEchoServer.cpp \
+    apps/Tests/MulticastSocketTest.cpp

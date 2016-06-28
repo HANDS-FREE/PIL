@@ -285,17 +285,27 @@ std::string dtos(const double &i, int precision)
 
 std::string buf2HexStr(u_char* buf,size_t size)
 {
-    char result[size*2];
+//    char result[size*2];
+    std::string result;
     const char* HEX_LUT="0123456789ABCDEF";
+    bool foundNoneZero=false;
     for(size_t i=0;i<size;i++)
     {
 #if PIL_ARCH_LITTLE_ENDIAN
-        u_char c=buf[size-1-i];
-#else
         u_char c=buf[i];
+#else
+        u_char c=buf[size-1-i];
 #endif
-        result[i<<1]  =(HEX_LUT[c>>4]);
-        result[(i<<1)+1]=(HEX_LUT[c&0x0F]);
+        if(c>>4||foundNoneZero)
+        {
+            foundNoneZero=true;
+            result.push_back(HEX_LUT[c>>4]);
+        }
+        if((c&0x0F)||foundNoneZero)
+        {
+            foundNoneZero=true;
+            result.push_back((HEX_LUT[c&0x0F]));
+        }
     }
     return result;
 }

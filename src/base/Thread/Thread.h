@@ -118,6 +118,7 @@ public:
         /// Returns the thread's stack size in bytes.
         /// If the default stack size is used, 0 is returned.
 
+    void start(Runnable& target){start(&target);}
     void start(Runnable* target=0);
         /// Starts the thread with the given target.
         ///

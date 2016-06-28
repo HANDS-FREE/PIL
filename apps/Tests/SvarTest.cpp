@@ -21,7 +21,6 @@ public:
         test_double=10000;
         test_string="10000";
 
-        cerr<<svar.GetInt("TestInt",1000)<<endl;
         pi_assert(svar.GetInt("TestInt",1000)==10000);
         pi_assert(svar.GetDouble("TestDouble",1000)==10000);
         pi_assert(svar.GetString("TestString","1000")=="10000");

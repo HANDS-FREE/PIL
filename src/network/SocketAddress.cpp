@@ -219,12 +219,14 @@ void SocketAddress::init(const std::string& hostAddress, pi::UInt16 portNumber)
 
 pi::UInt16 SocketAddress::resolveService(const std::string& service)
 {
-//    unsigned port;
-//    if (NumberParser::tryParseUnsigned(service, port) && port <= 0xFFFF)
-//    {
-//        return (UInt16) port;
-//    }
-//    else
+    unsigned port;
+    std::stringstream sst(service);
+    sst>>port;
+    if (port>0&&port <= 0xFFFF)
+    {
+        return (UInt16) port;
+    }
+    else
     {
 #if defined(PIL_VXWORKS)
         throw ServiceNotFoundException(service);

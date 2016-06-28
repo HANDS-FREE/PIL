@@ -19,6 +19,7 @@ struct StaticAssert<true>
 #define pi_static_assert(exp) \
 { pi::StaticAssert<((exp) != 0)> StaticAssertFailed; }
 
+#ifndef pi_assert
 #define pi_assert(f)\
     do { \
         if (!(f) ) { \
@@ -36,6 +37,7 @@ struct StaticAssert<true>
             exit(1); \
         } \
     } while (0);
+#endif
 
 #define pi_check_ptr(ptr) pi_assert(ptr)
 

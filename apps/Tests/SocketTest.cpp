@@ -19,6 +19,20 @@ public:
     {
         testEcho();
         testPoll();
+        testAvailable();
+        testFIFOBuffer();
+        testConnect();
+        testConnectRefused();
+        testConnectRefusedNB();
+        testNonBlocking();
+        testAddress();
+        testAssign();
+        testTimeout();
+        testBufferSize();
+        testOptions();
+        testSelect();
+        testSelect2();
+        testSelect3();
     }
 
     void testEcho();
@@ -110,57 +124,57 @@ void SocketTest::testAvailable()
 
 void SocketTest::testFIFOBuffer()
 {
-//    Buffer<char> b(5);
-//    b[0] = 'h';
-//    b[1] = 'e';
-//    b[2] = 'l';
-//    b[3] = 'l';
-//    b[4] = 'o';
+    Buffer<char> b(5);
+    b[0] = 'h';
+    b[1] = 'e';
+    b[2] = 'l';
+    b[3] = 'l';
+    b[4] = 'o';
 
-//    FIFOBuffer f(5, true);
+    FIFOBuffer f(5, true);
 
-//    f.readable += delegate(this, &SocketTest::onReadable);
-//    f.writable += delegate(this, &SocketTest::onWritable);
+    f.readable += delegate(this, &SocketTest::onReadable);
+    f.writable += delegate(this, &SocketTest::onWritable);
 
-//    pi_assert(0 == _notToReadable);
-//    pi_assert(0 == _readableToNot);
-//    pi_assert(0 == _notToWritable);
-//    pi_assert(0 == _writableToNot);
-//    f.write(b);
-//    pi_assert(1 == _notToReadable);
-//    pi_assert(0 == _readableToNot);
-//    pi_assert(0 == _notToWritable);
-//    pi_assert(1 == _writableToNot);
+    pi_assert(0 == _notToReadable);
+    pi_assert(0 == _readableToNot);
+    pi_assert(0 == _notToWritable);
+    pi_assert(0 == _writableToNot);
+    f.write(b);
+    pi_assert(1 == _notToReadable);
+    pi_assert(0 == _readableToNot);
+    pi_assert(0 == _notToWritable);
+    pi_assert(1 == _writableToNot);
 
-//    EchoServer echoServer;
-//    StreamSocket ss;
-//    ss.connect(SocketAddress("localhost", echoServer.port()));
-//    int n = ss.sendBytes(f);
-//    pi_assert (n == 5);
-//    pi_assert(1 == _notToReadable);
-//    pi_assert(1 == _readableToNot);
-//    pi_assert(1 == _notToWritable);
-//    pi_assert(1 == _writableToNot);
-//    pi_assert (f.isEmpty());
+    EchoServer echoServer;
+    StreamSocket ss;
+    ss.connect(SocketAddress("localhost", echoServer.port()));
+    int n = ss.sendBytes(f);
+    pi_assert (n == 5);
+    pi_assert(1 == _notToReadable);
+    pi_assert(1 == _readableToNot);
+    pi_assert(1 == _notToWritable);
+    pi_assert(1 == _writableToNot);
+    pi_assert (f.isEmpty());
 
-//    n = ss.receiveBytes(f);
-//    pi_assert (n == 5);
+    n = ss.receiveBytes(f);
+    pi_assert (n == 5);
 
-//    pi_assert(2 == _notToReadable);
-//    pi_assert(1 == _readableToNot);
-//    pi_assert(1 == _notToWritable);
-//    pi_assert(2 == _writableToNot);
+    pi_assert(2 == _notToReadable);
+    pi_assert(1 == _readableToNot);
+    pi_assert(1 == _notToWritable);
+    pi_assert(2 == _writableToNot);
 
-//    pi_assert (f[0] == 'h');
-//    pi_assert (f[1] == 'e');
-//    pi_assert (f[2] == 'l');
-//    pi_assert (f[3] == 'l');
-//    pi_assert (f[4] == 'o');
+    pi_assert (f[0] == 'h');
+    pi_assert (f[1] == 'e');
+    pi_assert (f[2] == 'l');
+    pi_assert (f[3] == 'l');
+    pi_assert (f[4] == 'o');
 
-//    f.readable -= delegate(this, &SocketTest::onReadable);
-//    f.writable -= delegate(this, &SocketTest::onWritable);
+    f.readable -= delegate(this, &SocketTest::onReadable);
+    f.writable -= delegate(this, &SocketTest::onWritable);
 
-//    ss.close();
+    ss.close();
 }
 
 
@@ -183,8 +197,14 @@ void SocketTest::testConnectRefused()
     UInt16 port = serv.address().port();
     serv.close();
     StreamSocket ss;
-    ss.connect(SocketAddress("localhost", port));
-    pi_assert2(true,("connection refused - must throw"));
+    try
+    {
+        ss.connect(SocketAddress("localhost", port));
+        pi_assert2(true,("connection refused - must throw"));
+    }
+    catch (ConnectionRefusedException&)
+    {
+    }
 }
 
 
@@ -197,8 +217,17 @@ void SocketTest::testConnectRefusedNB()
     serv.close();
     StreamSocket ss;
     Timespan timeout(2, 0);
-    ss.connect(SocketAddress("localhost", port), timeout);
-    pi_assert2(true,("connection refused - must throw"));
+    try
+    {
+        ss.connect(SocketAddress("localhost", port), timeout);
+        pi_assert2(false,("connection refused - must throw"));
+    }
+    catch (TimeoutException&)
+    {
+    }
+    catch (ConnectionRefusedException&)
+    {
+    }
 }
 
 

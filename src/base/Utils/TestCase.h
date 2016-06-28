@@ -39,6 +39,8 @@ public:
             throw TESTEXCEPTION(s);\
         }
 
+#define fail(s) pi_assert2(false,s)
+
 class TestResult
 {
 public:
@@ -55,7 +57,7 @@ public:
         return r;
     }
 
-    static std::string  aux_format_string_multilines(const std::string &s, const size_t len)
+    static std::string  aux_format_string_multilines(const std::string &s, const size_t len,const size_t leftPad=0)
     {
         std::string ret;
 
@@ -63,7 +65,10 @@ public:
         {
             ret+=rightPad(s.c_str()+p,len,true);
             if (p+len<s.size())
+            {
                 ret+="\n";
+                ret+=rightPad("",leftPad,true);
+            }
         }
         return ret;
     }
@@ -75,7 +80,7 @@ public:
             os<<"PASSED";
         }
         else
-            os<<"FAILED at "<<TestResult::aux_format_string_multilines(r.sst.str(),44);
+            os<<"FAILED at "<<TestResult::aux_format_string_multilines(r.sst.str(),52,35);
         return os;
     }
 
@@ -100,9 +105,11 @@ public:
     {
         try
         {
+            std::cerr<<"Calling "<<this->name<<"...  ";
             this->run();
+            std::cerr<<this->result<<"\n";
         }
-        catch(pi::TestException e)
+        catch(pi::TestException& e)
         {
             std::stringstream sst;
             sst<<"Line:"<<e.line<<",Func:"<<e.function;
@@ -110,11 +117,11 @@ public:
                 sst<<",File:"<<Path(e.file).getFileName();
             result.add(sst.str());
         }
-        catch(pi::Exception e)
+        catch(pi::Exception& e)
         {
-            result.add(e.message());
+            result.add(e.displayText());
         }
-        catch(std::exception e)
+        catch(std::exception& e)
         {
             result.add(e.what());
         }

@@ -301,13 +301,13 @@
     #define pil_ntoh_16(x) (x)
     #define pil_ntoh_32(x) (x)
 #else
-    #define PIL_ntoh_16(x) \
+    #define pil_ntoh_16(x) \
         ((((x) >> 8) & 0x00ff) | (((x) << 8) & 0xff00))
-    #define PIL_ntoh_32(x) \
+    #define pil_ntoh_32(x) \
         ((((x) >> 24) & 0x000000ff) | (((x) >> 8) & 0x0000ff00) | (((x) << 8) & 0x00ff0000) | (((x) << 24) & 0xff000000))
 #endif
-#define PIL_hton_16(x) PIL_ntoh_16(x)
-#define PIL_hton_32(x) PIL_ntoh_32(x)
+#define pil_hton_16(x) pil_ntoh_16(x)
+#define pil_hton_32(x) pil_ntoh_32(x)
 
 
 #if !defined(s6_addr16)
