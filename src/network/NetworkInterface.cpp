@@ -67,7 +67,7 @@ public:
     const std::string& name() const;
     const std::string& displayName() const;
     const std::string& adapterName() const;
-    const IPAddress& firstAddress(IPAddress::Family family) const;
+    const IPAddress firstAddress(IPAddress::Family family) const;
     void addAddress(const AddressTuple& address);
     const IPAddress& address(unsigned index) const;
     const NetworkInterface::AddressList& addressList() const;
@@ -287,21 +287,32 @@ inline const std::string& NetworkInterfaceImpl::adapterName() const
 }
 
 
-const IPAddress& NetworkInterfaceImpl::firstAddress(IPAddress::Family family) const
+const IPAddress NetworkInterfaceImpl::firstAddress(IPAddress::Family family) const
 {
+    if(!_addressList.size())
+#ifdef _DEBUG
+        throw NotFoundException("No address for network interface "+_adapterName+" found.");
+#else
+        return IPAddress(IPAddress::IPv4);
+#endif
     AddressList::const_iterator it = _addressList.begin();
     AddressList::const_iterator end = _addressList.end();
     for (;it != end; ++it)
     {
         const IPAddress& addr = it->get<NetworkInterface::IP_ADDRESS>();
         if (addr.family() == family) return addr;
+        else std::cerr<<addr.family()<<"!="<<family<<std::endl;
     }
+#ifdef _DEBUG
     {
         std::stringstream sst;
         sst<<((family == IPAddress::IPv4) ? std::string("IPv4") : std::string("IPv6"));
         sst<<" family address not found.";
         throw NotFoundException(sst.str());
     }
+#else
+        return IPAddress(IPAddress::IPv4);
+#endif
 }
 
 
@@ -658,7 +669,7 @@ const std::string& NetworkInterface::adapterName() const
 }
 
 
-const IPAddress& NetworkInterface::firstAddress(IPAddress::Family family) const
+const IPAddress NetworkInterface::firstAddress(IPAddress::Family family) const
 {
     return _pImpl->firstAddress(family);
 }

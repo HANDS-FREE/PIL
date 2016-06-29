@@ -195,13 +195,17 @@ void SocketAddress::init(const IPAddress& hostAddress, pi::UInt16 portNumber)
 
 void SocketAddress::init(const std::string& hostAddress, pi::UInt16 portNumber)
 {
+//    pi_dbg_info("Initializing %s:%d",hostAddress.c_str(),portNumber);
+//    std::cerr<<"initializing "<<hostAddress<<":"<<portNumber<<std::endl;
     IPAddress ip;
     if (IPAddress::tryParse(hostAddress, ip))
     {
         init(ip, portNumber);
+//        std::cerr<<"Parsed successfully "<<ip.toString()<<":"<<portNumber<<std::endl;
     }
     else
     {
+//        std::cerr<<"Parsing with DNS...\n";
         HostEntry he = DNS::hostByName(hostAddress);
         HostEntry::AddressList addresses = he.addresses();
         if (addresses.size() > 0)
@@ -211,6 +215,7 @@ void SocketAddress::init(const std::string& hostAddress, pi::UInt16 portNumber)
             std::sort(addresses.begin(), addresses.end(), AFLT());
 #endif
             init(addresses[0], portNumber);
+//            std::cerr<<"DNS parsed successfully "<<addresses[0].toString()<<":"<<portNumber<<std::endl;
         }
         else throw HostNotFoundException("No address found for host", hostAddress);
     }

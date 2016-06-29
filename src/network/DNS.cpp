@@ -37,6 +37,7 @@ HostEntry DNS::hostByName(const std::string& hostname, unsigned
     int rc = getaddrinfo(hostname.c_str(), NULL, &hints, &pAI);
     if (rc == 0)
     {
+//        std::cerr<<"Found entry for "<<hostname<<"\n";
         HostEntry result(pAI);
         freeaddrinfo(pAI);
         return result;

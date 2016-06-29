@@ -96,14 +96,14 @@ public:
     std::vector<std::stringstream*> infos;
 
 protected:
-    Father_Object scence;
+    Father_Object                   scence;
 
-    EventHandle *event_handle;
-    std::vector<Draw_Opengl*> draw_opengl;
+    EventHandle *                   event_handle;
+    std::vector<Draw_Opengl*>       draw_opengl;
 
-    pi::Mutex   m_mutex;
-    double fx,fy,cx,cy;
-    bool            bDrawWithNames;
+    pi::Mutex                       m_mutex;
+    double                          fx,fy,cx,cy;
+    bool                            bDrawWithNames;
 };
 
 

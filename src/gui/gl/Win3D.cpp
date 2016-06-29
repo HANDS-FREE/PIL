@@ -135,86 +135,26 @@ void Win3D::initializeGL()
 
 void Win3D::loadProjectionMatrix()
 {
-    double left,right,top,bottom,near,far;
     if(fx<=0||fy<=0)
     {
         camera()->loadProjectionMatrix();;
         return ;
     }
 
+    double left,right,top,bottom,near,far;
     {
         near=camera()->zNear();
         far=camera()->zFar();
 
         left=-cx/fx*near;
         right=(width()-cx)/fx*near;
-//        bottom=(-cy)/fy*near;
-//        top=(height()-cy)/fy*near;
         bottom=-(height()-cy)/fy*near;
         top=(cy)/fy*near;
-//        left=-20*near;right=20*near;bottom=-near;top=near;
     }
 
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-
-    double viewMatrix[16];
-    if(0)
-    {
-        cout<<"ProjIn:\n";
-        glGetDoublev(GL_PROJECTION_MATRIX, viewMatrix);
-        for(int i=0;i<4;i++)
-            cout<<viewMatrix[4*i]<<" "<<viewMatrix[4*i+1]<<" "<<viewMatrix[4*i+2]<<" "<<viewMatrix[4*i+3]<<"\n";
-    }
-
-    if(0)
-    {
-        double size=2;
-        near=-camera()->zNear();
-        left=size*near;
-        right=0;
-        bottom=0.75*left;
-        top=-bottom;
-        near=camera()->zNear();far=camera()->zFar();
-    }
-//    cout<<"Frustum:L:"<<left<<",R:"<<right<<",B:"<<bottom
-//       <<",T:"<<top<<",N:"<<near<<",F:"<<far<<endl;
-    if(1)
-    {
-        glFrustum(left,right,bottom,top,near,far);
-//            gluPerspective(120,1,camera()->zNear(),camera()->zFar());
-//            glFrustum(30*near,-30*near,30*near,-30*near,near,far);
-    }
-    else
-    {
-        GLdouble projectionMatrix_[16];
-        for (unsigned short j=0; j<16; ++j)
-        {
-            projectionMatrix_[j] = 0.0;
-        }
-        projectionMatrix_[0]=2*near/(right-left);
-        projectionMatrix_[2]=(right+left)/(right-left);
-        projectionMatrix_[5]=2*near/(top-bottom);
-        projectionMatrix_[6]=(top+bottom)/(top-bottom);
-        projectionMatrix_[10]=(far+near)/(near-far);
-        projectionMatrix_[11]=(2*far*near)/(far-near);
-        projectionMatrix_[14]=-1;
-
-        cout<<"Setting:\n";
-        for(int i=0;i<4;i++)
-            cout<<projectionMatrix_[4*i]<<" "<<projectionMatrix_[4*i+1]<<" "
-                <<projectionMatrix_[4*i+2]<<" "<<projectionMatrix_[4*i+3]<<"\n";
-
-        glLoadMatrixd(projectionMatrix_);
-    }
-    if(0)
-    {
-        cout<<"ProjOut:\n";
-        glGetDoublev(GL_PROJECTION_MATRIX, viewMatrix);
-        for(int i=0;i<4;i++)
-            cout<<viewMatrix[4*i]<<" "<<viewMatrix[4*i+1]<<" "<<viewMatrix[4*i+2]<<" "<<viewMatrix[4*i+3]<<"\n";
-    }
-    near=-1;
+    glFrustum(left,right,bottom,top,near,far);
 }
 
 void Win3D::preDraw()
@@ -283,8 +223,6 @@ bool   Win3D::drawingWithNames()
 {
     return bDrawWithNames;
 }
-
-
 
 }
 }

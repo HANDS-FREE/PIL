@@ -146,7 +146,9 @@ HEADERS += src/base/base.h \
     src/base/Thread/AbstractObserver.h \
     src/base/Thread/Observer.h \
     src/network/TCPServerDispatcher.h \
-    src/network/MulticastEchoServer.h
+    src/network/MulticastEchoServer.h \
+    src/gui/gl/MeshInterleaved.h \
+    src/gui/gl/ply/TinyPly.h
 
 SOURCES += \
     src/base/Thread/Thread_POSIX.cpp \
@@ -242,4 +244,6 @@ SOURCES += \
     src/base/Thread/NotificationCenter.cpp \
     src/network/TCPServerDispatcher.cpp \
     src/network/MulticastEchoServer.cpp \
-    apps/Tests/MulticastSocketTest.cpp
+    apps/Tests/MulticastSocketTest.cpp \
+    src/gui/gl/MeshInterleaved.cpp \
+    src/gui/gl/ply/TinyPly.cpp

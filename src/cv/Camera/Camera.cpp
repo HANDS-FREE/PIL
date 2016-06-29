@@ -138,7 +138,7 @@ Camera Camera::createFromName(const std::string& name)
         }
 
         string cameraType=svar.GetString(name+".CameraType","NoCamera");
-        VecParament para;
+        VecParament<double> para;
         if(svar.exist(name+".Paraments"))
         {
             para=svar.get_var(name+".Paraments",para);

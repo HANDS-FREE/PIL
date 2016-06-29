@@ -7,13 +7,18 @@
 #include <iomanip>
 #include <vector>
 
-class VecParament : public std::vector<double>
+template <typename VarType>
+class VecParament
 {
 public:
     VecParament(std::string str="")
     {
         fromString(str);
     }
+
+    size_t size(){return data.size();}
+
+    VarType& operator [](size_t idx){return data[idx];}
 
     bool fromString(std::string str)
     {
@@ -48,9 +53,9 @@ public:
             if(str_num==""||str_num==" ") continue;
 
             std::istringstream iss(str_num);
-            double x;
+            VarType x;
             iss>>x;
-            push_back(x);
+            data.push_back(x);
         }
         return true;
     }
@@ -59,9 +64,9 @@ public:
     {
         std::ostringstream ost;
         ost<<"[";
-        for(size_t i=0;i<size()-1;i++)
-            ost<<at(i)<<" ";
-        ost<<at(size()-1)<<"]";
+        for(size_t i=0;i<data.size()-1;i++)
+            ost<<data.at(i)<<" ";
+        ost<<data.at(size()-1)<<"]";
         return ost.str();
     }
 
@@ -78,6 +83,8 @@ public:
         os<<p.toString();
         return os;
     }
+
+    std::vector<VarType> data;
 };
 
 #endif // VECPARAMENT_H

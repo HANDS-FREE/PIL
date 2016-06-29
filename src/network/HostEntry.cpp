@@ -15,6 +15,9 @@ HostEntry::HostEntry()
 HostEntry::HostEntry(struct hostent* entry)
 {
     pi_check_ptr (entry);
+    if(!entry){
+        std::cerr<<"No entry found.\n";
+    }
 
     _name = entry->h_name;
     char** alias = entry->h_aliases;

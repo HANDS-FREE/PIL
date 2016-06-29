@@ -35,6 +35,9 @@ void DNSTest::testHostByName()
     try
     {
         HostEntry he1 = DNS::hostByName("nohost.appinf.com");
+        cerr<<he1.name()<<":"<<he1.addresses().size();
+        if(he1.addresses().size())
+            cerr<<he1.addresses()[0].toString()<<endl;
         fail("host not found - must throw");
     }
     catch (HostNotFoundException&)

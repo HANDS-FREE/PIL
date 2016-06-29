@@ -4,6 +4,7 @@
 #include <gui/gl/SignalHandle.h>
 #include <gui/widgets/SvarTable.h>
 #include <gui/gl/glHelper.h>
+#include <gui/gl/MeshInterleaved.h>
 
 using namespace std;
 
@@ -26,6 +27,8 @@ public:
     {
         win3d.SetEventHandle(this);
         win3d.SetDraw_Opengl(this);
+        mesh.loadPLY(svar.GetString("PlyFile","/home/zhaoyong/Data/Linux/Program/Apps/PIL-1.1.0/data/icosahedron.ply"));
+
         int i=0;
         while(!shouldStop())
         {
@@ -66,9 +69,12 @@ public:
         glVertex(pi::Point3d());
         glVertex(pi::Point3d(1,1,1));
         glEnd();
+
+        mesh.draw();
     }
 
-    pi::gl::Win3D win3d;
+    pi::gl::MeshInterleaved mesh;
+    pi::gl::Win3D           win3d;
 };
 
 int main(int argc,char** argv)

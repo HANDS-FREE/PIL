@@ -77,7 +77,7 @@ void builtin_test(void* /* ptr */, string /* sCommand */, string sParams)
     cout<<"SvarWithType.TestInt(0)="<<test_int<<endl;
 
     svar.ParseLine("Paraments ?=[0 1 2 3 4] ");
-    VecParament vec5;
+    VecParament<double> vec5;
     vec5=svar.get_var("Paraments",vec5);
     cout<<"Paraments([0 1 2 3 4])="<<vec5.toString()<<endl;
 

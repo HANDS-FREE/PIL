@@ -60,7 +60,7 @@ void SocketAddressTest::testSocketAddress()
     try
     {
         SocketAddress sa5("192.168.2.260", 80);
-        fail("invalid address - must throw");
+        fail("invalid address"+sa5.toString()+" - must throw");
     }
     catch (HostNotFoundException&)
     {

@@ -5,6 +5,7 @@
 #include "../Environment.h"
 #include "Timestamp.h"
 //#include "Timespan.h"
+#include "iostream"
 
 namespace pi {
 
@@ -78,7 +79,8 @@ public:
         /// Creates a DateTime for the date and time given in
         /// a Timestamp.
 
-    DateTime(int year, int month, int day, int hour = 0, int minute = 0, int second = 0, int millisecond = 0, int microsecond = 0);
+    DateTime(int year, int month, int day, int hour = 0, int minute = 0,
+             int second = 0, int millisecond = 0, int microsecond = 0);
         /// Creates a DateTime for the given Gregorian date and time.
         ///   * year is from 0 to 9999.
         ///   * month is from 1 to 12.
@@ -398,6 +400,15 @@ inline void swap(DateTime& d1, DateTime& d2)
     d1.swap(d2);
 }
 
+inline std::ostream& operator << (std::ostream &os, const DateTime &dt)
+{
+    char date[100];
+    std::sprintf(date,"%04d-%02d-%02d %02d:%02d:%02d.%03d UTC",
+                 dt.year(), dt.month(), dt.day(),
+                 dt.hour(), dt.minute(), dt.second(),
+                 dt.millisecond());
+    return os << date;
+}
 
 } // pi
 

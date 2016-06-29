@@ -103,11 +103,12 @@ public:
 
     void tryRun()
     {
+        std::cerr<<"-------------------------------------------------\n";
+        std::cerr<<"Calling "<<this->name<<"...  ";
+        std::stringstream detail;
         try
         {
-            std::cerr<<"Calling "<<this->name<<"...  ";
             this->run();
-            std::cerr<<this->result<<"\n";
         }
         catch(pi::TestException& e)
         {
@@ -116,6 +117,7 @@ public:
             if(svar.GetInt("Test.EchoFile",1))
                 sst<<",File:"<<Path(e.file).getFileName();
             result.add(sst.str());
+            detail<<e.displayText();
         }
         catch(pi::Exception& e)
         {
@@ -125,6 +127,7 @@ public:
         {
             result.add(e.what());
         }
+        std::cerr<<result<<detail.str()<<"\n";
     }
 
     void        callAll();

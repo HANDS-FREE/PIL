@@ -11,7 +11,9 @@ public:
 
     virtual void run()
     {
-
+        testEcho();
+        testSendToReceiveFrom();
+        testBroadcast();
     }
 
     void testEcho();

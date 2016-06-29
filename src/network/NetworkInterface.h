@@ -134,7 +134,7 @@ public:
         ///
         /// On other platforms this is the same as name().
 
-    const IPAddress& firstAddress(IPAddress::Family family) const;
+    const IPAddress firstAddress(IPAddress::Family family) const;
         /// Returns the first IP address bound to the interface.
         /// Throws NotFoundException if the address family is not
         /// configured on the interface.
