@@ -54,9 +54,9 @@ int MainWindow::setupLayout(void)
 
 void MainWindow::keyPressEvent(QKeyEvent *event)
 {
-    int     key;
+//    int     key;
 
-    key  = event->key();
+//    key  = event->key();
 }
 
 void MainWindow::mousePressEvent(QMouseEvent *event)

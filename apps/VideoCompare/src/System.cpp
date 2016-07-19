@@ -23,7 +23,7 @@ void System::run()
 {
     std::string& refVideoPath=svar.GetString("VideoRef.VideoPath","");
     if(!refVideoPath.size()){
-        cerr<<"Please set the \"refVideoPath\"!\n";
+        cerr<<"Please set the \"VideoRef.VideoPath\"!\n";
         return;
     }
 
