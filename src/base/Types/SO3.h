@@ -313,20 +313,16 @@ public:
     }
 
     // Convert from Axis Angle
-    bool FromAxis(const Point3_<Precision>& p,Precision angle)
+    static SO3 FromAxis(const Point3_<Precision>& p,Precision angle)
     {
         Precision det=sqrt(p.x*p.x+p.y*p.y+p.z*p.z);
         if(det<0.00001)
         {
-            return false;
+            return SO3();
         }
         angle *= 0.5;
         Precision p2v=sin(angle)/det;
-        x=p.x*p2v;
-        y=p.y*p2v;
-        z=p.z*p2v;
-        w=cos(angle);
-        return true;
+        return SO3(p.x*p2v,p.y*p2v,p.z*p2v,cos(angle));
     }
 
     void normalise()

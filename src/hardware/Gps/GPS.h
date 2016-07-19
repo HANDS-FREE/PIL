@@ -66,7 +66,7 @@ public:
     GPS(const std::string& nameGPS="GPS"):name(nameGPS){}
     virtual ~GPS(){}
 
-    virtual bool insert(const GPSData& gpsData);
+    virtual bool insert(const GPSData& gpsData){return false;}
 
     virtual size_t size(){return 0;}
 

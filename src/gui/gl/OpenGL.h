@@ -7,7 +7,7 @@
 #define INCLUDED_GL_H
 #include <GL/glew.h>
 //#include <GL/gl.h>
-//#include <GL/glut.h>
+#include <GL/glut.h>
 #endif
 #elif PIL_OS_FAMILY_WINDOWS
 

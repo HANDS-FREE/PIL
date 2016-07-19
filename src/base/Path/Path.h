@@ -393,7 +393,7 @@ inline const std::string& Path::getFileName() const
 
 inline const std::string Path::getFolderName() const
 {
-    if(_dirs.size()) return _dirs[_dirs.size()-1];
+    if(_dirs.size()) return _dirs.back();
     else return current();
 }
 

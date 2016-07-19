@@ -16,7 +16,7 @@ namespace pi{
 template <class Precision>
 struct Point2_
 {
-    Point2_(){}
+    Point2_():x(0),y(0){}
     Point2_(Precision x_,Precision y_):x(x_),y(y_){}
     inline Precision& operator[](int index)const
     {

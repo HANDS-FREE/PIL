@@ -85,7 +85,7 @@ bool GPSData::getLngLatfromXY(double dx, double dy,       // input
     // calculate lng2, lat2
     lng2=dx/lng_unit+lng1;
     lat2=dy/lat_unit+lat1;
-    return 0;
+    return true;
 }
 
 

@@ -454,6 +454,7 @@ bool Svar::ParseStream(istream& is)
 {
     string parsingFile=svar.GetString("Svar.ParsingFile","");
     pi::Path filePath(parsingFile);
+//    cout<<"ParsingFile: "<<parsingFile<<"\nParsingPath:"<<filePath.getFolderName()<<endl;
     insert("Svar.ParsingPath",filePath.getFolderName(),true);
     insert("Svar.ParsingName",filePath.getBaseName(),true);
     insert("Svar.ParsingFile",parsingFile,true);

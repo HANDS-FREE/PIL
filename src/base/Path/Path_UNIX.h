@@ -127,8 +127,8 @@ std::string PathImpl::currentImpl()
         path = cwd;
     else
         std::cerr<<("cannot get current directory");
-    std::string::size_type n = path.size();
-    if (n > 0 && path[n - 1] != '/') path.append("/");
+//    std::string::size_type n = path.size();
+//    if (n > 0 && path[n - 1] != '/') path.append("/");
     return path;
 }
 

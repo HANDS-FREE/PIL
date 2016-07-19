@@ -1,6 +1,7 @@
 *~
 *.o
 build
+build-*
 libs
 bin
 Data
@@ -14,4 +15,5 @@ src/uav
 PIL.pro
 PIL.pro.user
 PIL.pro.user.*
+*.pro.user*
 

@@ -7,10 +7,10 @@ VideoCompare::VideoCompare(VideoRef& ref)
     :videoRef(ref),
       extractor(svar.GetInt("ORBextractor.nFeatures",1000)),
       refImg(SvarWithType<cv::Mat>::instance()["VideoCompare.RefImage"]),
+      refImgHere(SvarWithType<cv::Mat>::instance()["VideoCompare.RefImageHere"]),
       trackImg(SvarWithType<cv::Mat>::instance()["VideoCompare.TrackImage"]),
       warpImg(SvarWithType<cv::Mat>::instance()["VideoCompare.WarpImage"]),
-      diffImg(SvarWithType<cv::Mat>::instance()["VideoCompare.DiffImage"]),
-      refImgHere(SvarWithType<cv::Mat>::instance()["VideoCompare.RefImageHere"])
+      diffImg(SvarWithType<cv::Mat>::instance()["VideoCompare.DiffImage"])
 {
 }
 

@@ -39,7 +39,7 @@ find_package(OpenCV 2.4.9 REQUIRED)
 find_package(Eigen3 3.1.0 REQUIRED)
 find_package(QGLViewer    REQUIRED)
 
-set(QT_LIBRARIES QtGui QtCore QtXml GL GLU glut GLEW)
+set(QT_LIBRARIES QtGui QtCore QtXml QtOpenGL GL GLU glut GLEW)
 #**Qt** : sudo apt-get install build-essential g++ libqt4-core libqt4-dev libqt4-gui qt4-doc qt4-designer 
 #**QGLViewer** : sudo apt-get install libqglviewer-dev libqglviewer2
 set(PI_BASE_INCLUDES ${CMAKE_SOURCE_DIR}/src)
@@ -47,6 +47,7 @@ set(PI_BASE_LIBRARIES pi_base)
 set(PI_GUI_LIBRARIES pi_gui)
 set(PI_CV_LIBRARIES pi_cv)
 set(PI_NETWORK_LIBRARIES pi_network)
+set(PI_HARDWARE_LIBRARIES pi_hardware)
 #####################################################################
 # Results collection
 macro(PIL_CHECK_DEPENDENCY LIBNAME)
