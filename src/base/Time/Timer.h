@@ -15,7 +15,7 @@ namespace pi {
 class TicTac
 {
 public:
-    TicTac(){}
+    TicTac(){Tic();}
     void   Tic();
     double Tac();
 
