@@ -1,7 +1,7 @@
 #include "SimDepthCamera.h"
 #include <base/Svar/Svar.h>
-#include <base/time/Time.h>
-#include <base/time/Global_Timer.h>
+#include <base/Time/Time.h>
+#include <base/Time/Global_Timer.h>
 
 
 SimCamera::SimCamera(QWidget *parent)

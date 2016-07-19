@@ -24,7 +24,7 @@
 #include <gui/gl/glHelper.h>
 #include <GL/gl.h>
 #include <base/Svar/Svar.h>
-#include <base/time/Global_Timer.h>
+#include <base/Time/Global_Timer.h>
 #include <gui/gl/SignalHandle.h>
 #include <opencv2/imgproc/imgproc.hpp>
 #include <opencv2/highgui/highgui.hpp>

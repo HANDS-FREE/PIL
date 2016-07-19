@@ -1,10 +1,10 @@
 #include "UAV.h"
 #include <base/Svar/Svar.h>
 #include <base/Svar/Scommand.h>
-#include <base/types/SE3.h>
-#include <base/time/Global_Timer.h>
-#include <base/time/Time.h>
-#include <base/types/Random.h>
+#include <base/Types/SE3.h>
+#include <base/Time/Global_Timer.h>
+#include <base/Time/Time.h>
+#include <base/Types/Random.h>
 
 #include <gui/gl/glHelper.h>
 

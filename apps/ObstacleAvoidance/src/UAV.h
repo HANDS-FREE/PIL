@@ -1,9 +1,9 @@
 #ifndef UAV_H
 #define UAV_H
 
-#include <base/types/types.h>
-#include <base/types/SPtr.h>
-#include <base/types/SE3.h>
+#include <base/Types/types.h>
+#include <base/Types/SPtr.h>
+#include <base/Types/SE3.h>
 
 class UAVImpl;
 

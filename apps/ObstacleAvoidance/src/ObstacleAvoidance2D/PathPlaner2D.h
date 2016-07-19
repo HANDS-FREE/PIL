@@ -1,7 +1,7 @@
 #ifndef PATHPLANER2D_H
 #define PATHPLANER2D_H
 #include <opencv2/core/core.hpp>
-#include <base/types/SPtr.h>
+#include <base/Types/SPtr.h>
 
 struct Map2DFrame
 {

@@ -1,6 +1,6 @@
 #ifndef SYSTEM_H
 #define SYSTEM_H
-#include <base/types/SPtr.h>
+#include <base/Types/SPtr.h>
 
 class SystemImpl;
 

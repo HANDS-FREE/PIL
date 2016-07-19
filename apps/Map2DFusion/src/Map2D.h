@@ -25,8 +25,8 @@
 #include <deque>
 #include <opencv2/features2d/features2d.hpp>
 
-#include <base/types/SPtr.h>
-#include <base/types/SE3.h>
+#include <base/Types/SPtr.h>
+#include <base/Types/SE3.h>
 #include <base/Thread/Thread.h>
 #include <gui/gl/GL_Object.h>
 

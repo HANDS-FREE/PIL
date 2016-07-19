@@ -2,7 +2,7 @@
 #define GLSCENCE_H
 
 #include <gui/gl/GL_Object.h>
-#include <base/types/SPtr.h>
+#include <base/Types/SPtr.h>
 
 class GLScenceImpl;
 class GLScence:public pi::gl::GL_Object
