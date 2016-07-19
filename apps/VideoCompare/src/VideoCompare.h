@@ -27,7 +27,7 @@ public:
     cv::Mat          H2Last;
 
     // things to publish
-    cv::Mat          &refImg,&trackImg,&warpImg,&diffImg;
+    cv::Mat          &refImg,&refImgHere,&trackImg,&warpImg,&diffImg;
 
 };
 

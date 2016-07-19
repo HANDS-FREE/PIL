@@ -98,10 +98,16 @@ bool System::trainVideoRef(VideoRef& refVideo,const std::string& refVideoPath)
 
         if(!svar.GetInt("WithQt"))
         {
-            if(!compare.warpImg.empty())
-                cv::imshow("warped",compare.warpImg);
-            if(!compare.diffImg.empty())
-                cv::imshow("diffImg",compare.diffImg);
+            if(!compare.refImg.empty()&&svar.GetInt("Draw.RefImage",1))
+                cv::imshow("RefImage",compare.refImg);
+            if(!compare.trackImg.empty()&&svar.GetInt("Draw.TrackImage",1))
+                cv::imshow("TrackImage",compare.trackImg);
+            if(!compare.refImgHere.empty()&&svar.GetInt("Draw.RefImageHere"))
+                cv::imshow("RefImageHere",compare.refImgHere);
+            if(!compare.warpImg.empty()&&svar.GetInt("Draw.WarpImage",1))
+                cv::imshow("WarpImage",compare.warpImg);
+            if(!compare.diffImg.empty()&&svar.GetInt("Draw.DiffImage",1))
+                cv::imshow("DiffImage",compare.diffImg);
             uchar key=cv::waitKey(20);
             if(key==27)   stop();
         }
@@ -156,10 +162,16 @@ bool System::findVideoDiff(VideoRef& refVideo,const std::string& videoPath)
 
         if(!svar.GetInt("WithQt"))
         {
-            if(!compare.warpImg.empty())
-                cv::imshow("warped",compare.warpImg);
-            if(!compare.diffImg.empty())
-                cv::imshow("diffImg",compare.diffImg);
+            if(!compare.refImg.empty()&&svar.GetInt("Draw.RefImage",1))
+                cv::imshow("RefImage",compare.refImg);
+            if(!compare.trackImg.empty()&&svar.GetInt("Draw.TrackImage",1))
+                cv::imshow("TrackImage",compare.trackImg);
+            if(!compare.refImgHere.empty()&&svar.GetInt("Draw.RefImageHere"))
+                cv::imshow("RefImageHere",compare.refImgHere);
+            if(!compare.warpImg.empty()&&svar.GetInt("Draw.WarpImage",1))
+                cv::imshow("WarpImage",compare.warpImg);
+            if(!compare.diffImg.empty()&&svar.GetInt("Draw.DiffImage",1))
+                cv::imshow("DiffImage",compare.diffImg);
             uchar key=cv::waitKey(20);
             if(key==27)   stop();
         }

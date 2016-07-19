@@ -9,7 +9,8 @@ VideoCompare::VideoCompare(VideoRef& ref)
       refImg(SvarWithType<cv::Mat>::instance()["VideoCompare.RefImage"]),
       trackImg(SvarWithType<cv::Mat>::instance()["VideoCompare.TrackImage"]),
       warpImg(SvarWithType<cv::Mat>::instance()["VideoCompare.WarpImage"]),
-      diffImg(SvarWithType<cv::Mat>::instance()["VideoCompare.DiffImage"])
+      diffImg(SvarWithType<cv::Mat>::instance()["VideoCompare.DiffImage"]),
+      refImgHere(SvarWithType<cv::Mat>::instance()["VideoCompare.RefImageHere"])
 {
 }
 
@@ -113,6 +114,11 @@ bool VideoCompare::trackFrame(SPtr<VideoFrame>& frame,SPtr<VideoFrame>& ref,cv::
         cv::Mat H=frame->H2Last.clone();
         cv::warpPerspective(ref->img,warpImg,H,
                             cv::Size(warpImg.cols,warpImg.rows),cv::INTER_LINEAR,cv::BORDER_TRANSPARENT);
+
+        if(svar.GetInt("Draw.RefImageHere",1))
+        {
+            cv::warpPerspective(refImg,refImgHere,H,cv::Size(refImg.cols,refImg.rows),cv::INTER_LINEAR,cv::BORDER_CONSTANT);
+        }
 
         cv::absdiff(trackImg,warpImg,diffImg);
 
@@ -238,6 +244,10 @@ bool VideoCompare::trackFrame(SPtr<VideoFrame>& frame,SPtr<VideoFrame>& ref)
         cv::Mat H=frame->H2Last.clone();
         cv::warpPerspective(ref->img,warpImg,H,
                             cv::Size(warpImg.cols,warpImg.rows),cv::INTER_LINEAR,cv::BORDER_TRANSPARENT);
+        if(svar.GetInt("RefImgHere",1))
+        {
+            cv::warpPerspective(refImg,refImgHere,H,cv::Size(warpImg.cols,warpImg.rows),cv::INTER_LINEAR,cv::BORDER_CONSTANT);
+        }
         // draw keypoints
         for(size_t i=0;i<herePts.size();i++)
         {
