@@ -3,7 +3,7 @@
 //
 // Version Information
 //
-#define PIL_VERSION 0x01010000//1.1.0
+#include "PIL_VERSION.h"
 
 //
 // Ensure that PIL_DLL is default unless PIL_STATIC is defined
