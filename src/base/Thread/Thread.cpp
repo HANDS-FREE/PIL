@@ -108,6 +108,7 @@ Thread::Priority Thread::getPriority() const
 
 void Thread::start(Runnable* target)
 {
+    _needStop=false;
     if(!target)
         startImpl(new RunnableHolder(*this));
     else
@@ -117,6 +118,7 @@ void Thread::start(Runnable* target)
 
 void Thread::start(Callable target, void* pData)
 {
+    _needStop=false;
     startImpl(new CallableHolder(target, pData));
 }
 

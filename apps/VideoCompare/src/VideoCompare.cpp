@@ -12,6 +12,13 @@ VideoCompare::VideoCompare(VideoRef& ref)
       warpImg(SvarWithType<cv::Mat>::instance()["VideoCompare.WarpImage"]),
       diffImg(SvarWithType<cv::Mat>::instance()["VideoCompare.DiffImage"])
 {
+    mutex=SvarWithType<SPtr<pi::MutexRW> >::instance()
+            .get_var("VideoCompare.MutexImage",
+                     SPtr<pi::MutexRW>(new pi::MutexRW));
+}
+
+VideoCompare::~VideoCompare()
+{
 }
 
 // Bit set count operation from
@@ -108,6 +115,7 @@ bool VideoCompare::trackFrame(SPtr<VideoFrame>& frame,SPtr<VideoFrame>& ref,cv::
     //debug things and publish
     {
         // warp kf to here
+        pi::WriteMutex lock(*mutex);
         refImg=ref->img;
         trackImg=frame->img;
         warpImg=trackImg.clone();
@@ -238,6 +246,7 @@ bool VideoCompare::trackFrame(SPtr<VideoFrame>& frame,SPtr<VideoFrame>& ref)
     //debug things and publish
     {
         // warp kf to here
+        pi::WriteMutex lock(*mutex);
         refImg=ref->img;
         trackImg=frame->img;
         warpImg=trackImg.clone();

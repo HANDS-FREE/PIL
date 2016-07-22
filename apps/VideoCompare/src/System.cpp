@@ -1,13 +1,41 @@
 #include "System.h"
 #include <base/Svar/Svar.h>
+#include <base/Svar/Scommand.h>
 #include <opencv2/highgui/highgui.hpp>
 #include "VideoCompare.h"
 #include "VideoFrame.h"
 #include <base/Time/Global_Timer.h>
 
+void SystemHandle(void *ptr,string cmd,string para)
+{
+    if(cmd=="System.Start")
+    {
+        svar.GetInt("PathSetted")=1;
+        System* sys=(System*)ptr;
+        if(!sys->isRunning())
+            sys->start();
+    }
+    if(cmd=="System.Stop")
+    {
+        svar.GetInt("PathSetted")=0;
+        System* sys=(System*)ptr;
+        sys->stop();
+    }
+
+
+}
+
 System::System()
 {
+    scommand.RegisterCommand("System.Start",SystemHandle,this);
+    scommand.RegisterCommand("System.Stop",SystemHandle,this);
+    if(svar.GetInt("WithQt"))
+    {
+        mainWindow=SPtr<MainWindow>(new MainWindow());
+        mainWindow->call("Show");
+    }
 }
+
 
 System::~System()
 {
@@ -21,6 +49,13 @@ System::~System()
 
 void System::run()
 {
+
+    if(svar.GetInt("WithQt"))
+    {
+        int& pathSetted=svar.GetInt("PathSetted");
+        while(!pathSetted) sleep(10);
+    }
+
     std::string& refVideoPath=svar.GetString("VideoRef.VideoPath","");
     if(!refVideoPath.size()){
         cerr<<"Please set the \"VideoRef.VideoPath\"!\n";
@@ -57,6 +92,10 @@ void System::run()
 
     // compare video difference
     findVideoDiff(*videoRef,svar.GetString("Video2Compare",""));
+
+    videoRef->save2File(videoRefPath);
+
+    cout<<"System stoped.\n";
 }
 
 bool System::trainVideoRef(VideoRef& refVideo,const std::string& refVideoPath)
@@ -75,8 +114,10 @@ bool System::trainVideoRef(VideoRef& refVideo,const std::string& refVideoPath)
 
     double scale=svar.GetDouble("ComputeScale",0.5);
     int    trainSkip=svar.GetInt("TrainSkip",5);
+    int& pause=svar.GetInt("System.Pause");
     while(!shouldStop())
     {
+        while(pause) sleep(10);
         SPtr<VideoFrame> frame(new VideoFrame);
         for(int i=0;i<trainSkip;i++)
             video>>frame->img;
@@ -111,6 +152,10 @@ bool System::trainVideoRef(VideoRef& refVideo,const std::string& refVideoPath)
             uchar key=cv::waitKey(20);
             if(key==27)   stop();
         }
+        else
+        {
+            mainWindow->call("Update");
+        }
     }
 
     return true;
@@ -138,8 +183,11 @@ bool System::findVideoDiff(VideoRef& refVideo,const std::string& videoPath)
 
     double scale=svar.GetDouble("ComputeScale",0.5);
     int    computeSkip=svar.GetInt("ComputeSkip",5);
+
+    int& pause=svar.GetInt("System.Pause");
     while(!shouldStop())
     {
+        while(pause) sleep(10);
         SPtr<VideoFrame> frame(new VideoFrame);
         for(int i=0;i<computeSkip;i++)
             video>>frame->img;
@@ -174,6 +222,10 @@ bool System::findVideoDiff(VideoRef& refVideo,const std::string& videoPath)
                 cv::imshow("DiffImage",compare.diffImg);
             uchar key=cv::waitKey(20);
             if(key==27)   stop();
+        }
+        else
+        {
+            mainWindow->call("Update");
         }
     }
 

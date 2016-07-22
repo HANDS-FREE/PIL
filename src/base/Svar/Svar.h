@@ -169,10 +169,9 @@ public:
         it=data.find(name);
         if(it==data.end())
         {
-            Var_Type def;
             while(1)
             {
-                InsertRet ret=data.insert(std::pair<std::string,Var_Type>(name,def));
+                InsertRet ret=data.insert(std::pair<std::string,Var_Type>(name,Var_Type()));
                 if(ret.second)
                     return (ret.first->second);
             }

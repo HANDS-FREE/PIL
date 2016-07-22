@@ -7,6 +7,7 @@ class VideoCompare
 {
 public:
     VideoCompare(VideoRef& ref);
+    ~VideoCompare();
 
 
     int DescriptorDistance(const cv::Mat &a, const cv::Mat &b);
@@ -27,7 +28,8 @@ public:
     cv::Mat          H2Last;
 
     // things to publish
-    cv::Mat          &refImg,&refImgHere,&trackImg,&warpImg,&diffImg;
+    SPtr<pi::MutexRW>  mutex;
+    cv::Mat            &refImg,&refImgHere,&trackImg,&warpImg,&diffImg;
 
 };
 
