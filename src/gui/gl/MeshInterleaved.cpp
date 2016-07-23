@@ -394,7 +394,7 @@ void MeshInterleaved::draw()
         if(loneVertex){
             fprintf(stderr,"\nThere were lone Vertices!");
         }
-        printf("\nMesh Check done");
+//        printf("\nMesh Check done");
     }
 
 

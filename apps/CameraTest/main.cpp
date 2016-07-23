@@ -149,6 +149,10 @@ bool CameraTest(pi::Camera camera)
 int main(int argc,char** argv)
 {
     svar.ParseMain(argc,argv);
+    if(!svar.exist("Undis.CameraIn"))
+    {
+        svar.ParseFile("../apps/CameraTest/Default.cfg");
+    }
 
     int times=svar.GetInt("Times",10000);
     cout<<"Times="<<times<<endl;

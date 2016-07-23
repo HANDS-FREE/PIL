@@ -52,6 +52,7 @@ ELSE(WIN32) # Linux
 	# installation selected by user
 	$ENV{PIL_PATH}
 	# system placed in /usr/local/include
+	/data/zhaoyong/Linux/Program/Apps/PIL-1.1.0	
 	/mnt/server0/users/zhaoyong/Program/Apps/PIS-1.1.0/Thirdparty/PIL-1.1.0
 	/data/zhaoyong/Linux/Program/Apps/PIS-1.1.0/Thirdparty/PIL-1.1.0	
 	)
@@ -63,10 +64,11 @@ ELSE(WIN32) # Linux
 		foreach (PIL_MODULE_NAME ${PIL_MODULES2FIND})
 
 			#MESSAGE( STATUS "Looking for PIL module '${PIL_MODULE_NAME}'" )
-			FIND_LIBRARY(PI_${PIL_MODULE_NAME}_LIBRARIES NAMES pi_${PIL_MODULES2FIND}
+			FIND_LIBRARY(PI_${PIL_MODULE_NAME}_LIBRARIES NAMES pi_${PIL_MODULE_NAME}
 				PATHS
-				/mnt/server0/users/zhaoyong/Program/Apps/PIS-1.1.0/Thirdparty/PIL-1.1.0/libs
+				${PIL_PATH}/libs
 				)
+			#MESSAGE( STATUS "Found PIL module '${PIL_MODULE_NAME}' at ${PI_${PIL_MODULE_NAME}_LIBRARIES}" )
 
 			if(PI_${PIL_MODULE_NAME}_LIBRARIES)
 				set(PI_${PIL_MODULE_NAME}_INCLUDES ${PIL_INCLUDES})

@@ -1,14 +1,17 @@
 #include <iostream>
 
-#include "base/Svar/Svar_Inc.h"
-#include "base/time/Global_Timer.h"
-#include "base/types/SO3.h"
+#include "base/Svar/Svar.h"
+#include "base/Time/Global_Timer.h"
+#include "base/Types/SO3.h"
 #include <base/utils/utils_str.h>
 
+#ifdef HAS_TOON
 #include  <TooN/so3.h>
+#endif
 
 using namespace pi;
 using namespace std;
+
 template<typename Precision>
 bool TestMatrix()
 {
@@ -16,6 +19,7 @@ bool TestMatrix()
     so3_zy.FromAxis(pi::Point3_<Precision>(1.0,2.0,3.0),1.2);
     cout<<"ZY:\n"<<so3_zy<<endl;
 
+#ifdef HAS_TOON
     TooN::SO3<Precision> so3_toon;
     so3_zy.getMatrixUnsafe(so3_toon.get_matrix());
     cout<<"TooN:\n"<<so3_toon;
@@ -23,6 +27,7 @@ bool TestMatrix()
     TooN::Matrix<3,3,Precision> m=so3_toon.get_matrix();
     so3_zy.fromMatrixUnsafe(m);
     cout<<"ZY:\n"<<so3_zy<<endl;
+#endif
 
     pi::SO3f so3_f=so3_zy;
     cout<<"so3_f="<<so3_f<<endl;

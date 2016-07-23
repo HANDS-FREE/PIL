@@ -27,7 +27,7 @@ public:
     {
         win3d.SetEventHandle(this);
         win3d.SetDraw_Opengl(this);
-        mesh.loadPLY(svar.GetString("PlyFile","/home/zhaoyong/Data/Linux/Program/Apps/PIL-1.1.0/data/icosahedron.ply"));
+        mesh.loadPLY(svar.GetString("PlyFile","../data/icosahedron.ply"));
 
         int i=0;
         while(!shouldStop())
