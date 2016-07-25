@@ -455,7 +455,7 @@ bool Svar::ParseStream(istream& is)
     string parsingFile=svar.GetString("Svar.ParsingFile","");
     pi::Path filePath(parsingFile);
 //    cout<<"ParsingFile: "<<parsingFile<<"\nParsingPath:"<<filePath.getFolderName()<<endl;
-    insert("Svar.ParsingPath",filePath.getFolderName(),true);
+    insert("Svar.ParsingPath",filePath.getFolderPath(),true);
     insert("Svar.ParsingName",filePath.getBaseName(),true);
     insert("Svar.ParsingFile",parsingFile,true);
     string buffer;
@@ -502,7 +502,7 @@ bool Svar::ParseFile(string sFileName)
         svar.GetString("Svar.ParsingFile",sFileName)=fileQueue.back();
         string parsingFile=fileQueue.back();
         pi::Path filePath(parsingFile);
-        insert("Svar.ParsingPath",filePath.getFolderName(),true);
+        insert("Svar.ParsingPath",filePath.getFolderPath(),true);
         insert("Svar.ParsingName",filePath.getFileName(),true);
         insert("Svar.ParsingFile",parsingFile,true);
     }
@@ -530,7 +530,7 @@ bool Svar::ParseMain(int argc, char** argv, PARSEMODE mode)
     string cfg_File=argv[0];
     insert("argv0", cfg_File);
     pi::Path cfgPath(cfg_File);
-    insert("ProgramPath",cfgPath.getPath());
+    insert("ProgramPath",cfgPath.getFolderPath());
     insert("ProgramName",cfgPath.getFileName());
     cfg_File += ".cfg";
     if( !pi::Path::pathExist(cfg_File))

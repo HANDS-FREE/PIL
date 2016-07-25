@@ -899,25 +899,18 @@ void Path::parseGuess(const std::string& path)
     }
 }
 
-const std::string Path::getPath() const
+const std::string Path::getFolderPath() const
 {
     std::string result;
-    if (!_device.empty())
+    if (!_absolute)
     {
-        result.append("/");
-        result.append(_device);
-        result.append(":/");
-    }
-    else if (_absolute)
-    {
-        result.append("/");
+        result.append(".");
     }
     for (StringVec::const_iterator it = _dirs.begin(); it != _dirs.end(); ++it)
     {
+        result.push_back(separator());
         result.append(*it);
-        result.append("/");
     }
-    result.append(_name);
     return result;
 }
 

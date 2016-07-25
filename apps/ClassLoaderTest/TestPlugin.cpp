@@ -56,10 +56,10 @@ void testClassLoader2()
     cl.loadLibrary(path);
 
     assert (cl.begin() != cl.end());
-    assert (cl.findClass("PluginA")==nullptr);
-    assert (cl.findClass("PluginB")==nullptr);
-    assert (cl.findClass("PluginC")==nullptr);
-    assert (cl.findManifest(path)==nullptr);
+    assert (cl.findClass("PluginA")!=nullptr);
+    assert (cl.findClass("PluginB")!=nullptr);
+    assert (cl.findClass("PluginC")!=nullptr);
+    assert (cl.findManifest(path)!=nullptr);
 
     assert (cl.isLibraryLoaded(path));
     assert (cl.manifestFor(path).size() == 3);

@@ -106,19 +106,19 @@ bool CameraTest(pi::Camera camera)
     if(!camera.isValid()) return false;
 
     int times=svar.GetInt("Times",10000);
-    cout<<"Testing hardware "<<camera.info()<<",Times="<<times<<endl;
+    cout<<"Testing camera "<<camera.info()<<",Times="<<times<<endl;
 
     vector<pi::Point2d> vec_re;
     vector<pi::Point3d> vec_cam;
     vec_cam.resize(times);
     vec_re.resize(times);
-//    vec_p.resize(times);
-//    for(int i=0;i<times;i++)
-//    {
-//        double rdx=pi::Random::RandomValue<double>()*camera.width();
-//        double rdy=pi::Random::RandomValue<double>()*camera.height();
-//        vec_p[i]=(pi::Point2d(rdx,rdy));
-//    }
+    vec_p.resize(times);
+    for(int i=0;i<times;i++)
+    {
+        double rdx=pi::Random::RandomValue<double>()*camera.width();
+        double rdy=pi::Random::RandomValue<double>()*camera.height();
+        vec_p[i]=(pi::Point2d(rdx,rdy));
+    }
 
     pi::Point2d testP=vec_p[0];
     pi::Point3d cam_P=camera.UnProject(testP);
@@ -163,7 +163,7 @@ int main(int argc,char** argv)
     timer.leave("DoNothing");
 
     {
-        pi::Camera camera=pi::Camera::createFromName("GoProFISH");
+        pi::Camera camera=pi::Camera::createFromName(svar.GetString("Undis.CameraIn","GoProFISH"));
         cout<<camera.info()<<endl;
         CameraTest(camera);
     }

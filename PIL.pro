@@ -246,4 +246,5 @@ SOURCES += \
     src/network/MulticastEchoServer.cpp \
     apps/Tests/MulticastSocketTest.cpp \
     src/gui/gl/MeshInterleaved.cpp \
-    src/gui/gl/ply/TinyPly.cpp
+    src/gui/gl/ply/TinyPly.cpp \
+    apps/Tests/PathTest.cpp

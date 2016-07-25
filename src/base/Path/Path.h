@@ -5,6 +5,13 @@
 #include <vector>
 #include <string>
 
+/**
+  Path=getFolderPath+separator()+getFileName()
+
+  FolderPath=
+
+ **/
+
 namespace pi {
 
 
@@ -205,9 +212,9 @@ public:
     const std::string getFolderName() const;
         /// Returns the folder name.
 
-    const std::string getPath() const;
-        /// Returns the folder name.
-
+    const std::string getFolderPath() const;
+        /// Returns the folder path
+        ///
     Path& setBaseName(const std::string& name);
         /// Sets the basename part of the filename and
         /// does not change the extension.
