@@ -248,3 +248,5 @@ SOURCES += \
     src/gui/gl/MeshInterleaved.cpp \
     src/gui/gl/ply/TinyPly.cpp \
     apps/Tests/PathTest.cpp
+
+QMAKE_CXXFLAGS == -std=c++11
